@@ -7,22 +7,22 @@ export default async function AdminPatients() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Patients</h1>
+      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight">Patients</h1>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl border border-white/10 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="p-4 font-medium text-gray-600">Name</th>
-              <th className="p-4 font-medium text-gray-600">Email</th>
-              <th className="p-4 font-medium text-gray-600">NIC</th>
-              <th className="p-4 font-medium text-gray-600">Phone</th>
-              <th className="p-4 font-medium text-gray-600">DOB</th>
+            <tr className="bg-white/5 border-b border-white/10">
+              <th className="p-4 font-medium text-zinc-400">Name</th>
+              <th className="p-4 font-medium text-zinc-400">Email</th>
+              <th className="p-4 font-medium text-zinc-400">NIC</th>
+              <th className="p-4 font-medium text-zinc-400">Phone</th>
+              <th className="p-4 font-medium text-zinc-400">DOB</th>
             </tr>
           </thead>
           <tbody>
             {patients.map((pat) => (
-              <tr key={pat.id} className="border-b border-gray-100 hover:bg-gray-50">
+              <tr key={pat.id} className="border-b border-white/5 hover:bg-white/10 transition-colors">
                 <td className="p-4 font-medium">{pat.pname}</td>
                 <td className="p-4">{pat.user.email}</td>
                 <td className="p-4">{pat.pnic}</td>

@@ -11,24 +11,24 @@ export default async function AdminDoctors() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Doctors</h1>
+      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight">Doctors</h1>
       
       <DoctorForm specialties={specialties} />
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl border border-white/10 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="p-4 font-medium text-gray-600">Name</th>
-              <th className="p-4 font-medium text-gray-600">Email</th>
-              <th className="p-4 font-medium text-gray-600">Specialty</th>
-              <th className="p-4 font-medium text-gray-600">Phone</th>
-              <th className="p-4 font-medium text-gray-600 text-right">Actions</th>
+            <tr className="bg-white/5 border-b border-white/10">
+              <th className="p-4 font-medium text-zinc-400">Name</th>
+              <th className="p-4 font-medium text-zinc-400">Email</th>
+              <th className="p-4 font-medium text-zinc-400">Specialty</th>
+              <th className="p-4 font-medium text-zinc-400">Phone</th>
+              <th className="p-4 font-medium text-zinc-400 text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {doctors.map((doc) => (
-              <tr key={doc.id} className="border-b border-gray-100 hover:bg-gray-50">
+              <tr key={doc.id} className="border-b border-white/5 hover:bg-white/10 transition-colors">
                 <td className="p-4 font-medium">{doc.docname}</td>
                 <td className="p-4">{doc.user.email}</td>
                 <td className="p-4">{doc.specialty.sname}</td>
@@ -38,7 +38,7 @@ export default async function AdminDoctors() {
                     "use server"
                     await deleteDoctor(doc.id)
                   }}>
-                    <button className="text-red-600 hover:text-red-800 text-sm font-medium border border-red-200 rounded px-3 py-1 hover:bg-red-50">
+                    <button className="text-red-400 hover:text-red-300 text-sm font-medium border border-red-500/20 rounded px-3 py-1 hover:bg-red-500/100/10 transition-colors">
                       Delete
                     </button>
                   </form>

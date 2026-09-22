@@ -10,16 +10,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   }
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      <aside className="w-64 bg-slate-800 text-white flex flex-col">
-        <div className="p-4 text-2xl font-bold border-b border-slate-700">eDoc Admin</div>
+    <div className="flex h-screen bg-[#050505]">
+      <aside className="w-64 backdrop-blur-2xl bg-white/[0.03] border-r border-white/10 text-white flex flex-col">
+        <div className="p-4 text-2xl font-bold border-b border-white/10">eDoc Admin</div>
         <nav className="flex-1 p-4 space-y-2">
-          <Link href="/admin" className="block px-4 py-2 rounded hover:bg-slate-700">Dashboard</Link>
-          <Link href="/admin/doctors" className="block px-4 py-2 rounded hover:bg-slate-700">Doctors</Link>
-          <Link href="/admin/patients" className="block px-4 py-2 rounded hover:bg-slate-700">Patients</Link>
-          <Link href="/admin/appointments" className="block px-4 py-2 rounded hover:bg-slate-700">Appointments</Link>
+          <Link href="/admin" className="block px-4 py-2 rounded hover:bg-white/10 text-zinc-300 hover:text-white transition-all">Dashboard</Link>
+          <Link href="/admin/doctors" className="block px-4 py-2 rounded hover:bg-white/10 text-zinc-300 hover:text-white transition-all">Doctors</Link>
+          <Link href="/admin/patients" className="block px-4 py-2 rounded hover:bg-white/10 text-zinc-300 hover:text-white transition-all">Patients</Link>
+          <Link href="/admin/appointments" className="block px-4 py-2 rounded hover:bg-white/10 text-zinc-300 hover:text-white transition-all">Appointments</Link>
         </nav>
-        <div className="p-4 border-t border-slate-700">
+        <div className="p-4 border-t border-white/10">
           <div className="mb-4 text-sm truncate">{session.user.email}</div>
           <form action={async () => {
             "use server"
