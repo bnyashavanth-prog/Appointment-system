@@ -11,7 +11,11 @@ export default function LoginPage() {
 
         <form action={async (formData) => {
           "use server"
-          await signIn("credentials", formData)
+          try {
+            await signIn("credentials", formData)
+          } catch (error: any) {
+            if (error.name === "RedirectError") throw error; // Next.js redirect
+          }
         }} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700">Email Address</label>
