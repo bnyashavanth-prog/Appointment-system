@@ -20,7 +20,7 @@ export async function addSession(formData: FormData) {
   const parsed = sessionSchema.safeParse(data)
   
   if (!parsed.success) {
-    return { error: parsed.error.errors[0].message }
+    return { error: parsed.error.issues[0].message }
   }
 
   const doctor = await prisma.doctor.findUnique({

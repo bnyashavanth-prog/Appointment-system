@@ -20,7 +20,7 @@ export async function registerPatient(formData: FormData) {
   
   const parsed = signupSchema.safeParse(data)
   if (!parsed.success) {
-    return { error: parsed.error.errors[0].message }
+    return { error: parsed.error.issues[0].message }
   }
 
   const { pname, email, password, pnic, pdob, ptel, paddress } = parsed.data

@@ -23,7 +23,7 @@ export async function addDoctor(formData: FormData) {
   const parsed = doctorSchema.safeParse(data)
   
   if (!parsed.success) {
-    return { error: parsed.error.errors[0].message }
+    return { error: parsed.error.issues[0].message }
   }
 
   const { docname, email, password, docnic, doctel, specialtyId } = parsed.data
