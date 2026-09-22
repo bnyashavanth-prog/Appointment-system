@@ -11,11 +11,11 @@ export default async function DoctorsList() {
 
   return (
     <div>
-      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight">Our Doctors</h1>
+      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight animate-fade-in-up">Our Doctors</h1>
       
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {doctors.map(doctor => (
-          <div key={doctor.id} className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-transform hover:-translate-y-1">
+          <div key={doctor.id} className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up">
             <h2 className="text-xl font-bold">{doctor.docname}</h2>
             <p className="text-zinc-400 mb-4">{doctor.specialty.sname}</p>
             

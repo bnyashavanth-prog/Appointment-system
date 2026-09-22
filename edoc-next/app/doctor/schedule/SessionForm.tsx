@@ -26,7 +26,7 @@ export default function SessionForm() {
   }
 
   return (
-    <form id="sessionForm" action={handleSubmit} className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-transform hover:-translate-y-1 mb-8 space-y-4">
+    <form id="sessionForm" action={handleSubmit} className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up mb-8 space-y-4">
       <h2 className="text-xl font-bold mb-4">Add New Session</h2>
       
       {error && <div className="text-red-400 bg-red-500/10 p-2 rounded text-sm">{error}</div>}

@@ -18,11 +18,11 @@ export default async function DoctorSchedulePage() {
 
   return (
     <div>
-      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight">My Schedule</h1>
+      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight animate-fade-in-up">My Schedule</h1>
       
       <SessionForm />
 
-      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl border border-white/10 overflow-hidden">
+      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl transition-all duration-300 ease-out animate-fade-in-up border border-white/10 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-white/5 border-b border-white/10">
@@ -35,7 +35,7 @@ export default async function DoctorSchedulePage() {
           </thead>
           <tbody>
             {schedules.map((sched) => (
-              <tr key={sched.id} className="border-b border-white/5 hover:bg-white/10 transition-colors">
+              <tr key={sched.id} className="border-b border-white/5 hover:bg-white/[0.04] transition-colors duration-200 ease-out">
                 <td className="p-4 font-medium">{sched.title}</td>
                 <td className="p-4">
                   {sched.scheduledate.toLocaleDateString()} @ {sched.scheduletime.toISOString().substring(11, 16)}

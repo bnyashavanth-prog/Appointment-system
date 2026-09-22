@@ -5,7 +5,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#050505]">
       <div className="w-full max-w-md p-8 space-y-6 bg-white/5 rounded-xl shadow-md">
         <div className="text-center">
-          <h1 className="text-3xl font-bold">Welcome Back!</h1>
+          <h1 className="text-3xl font-bold animate-fade-in-up">Welcome Back!</h1>
           <p className="mt-2 text-sm text-zinc-400">Login with your details to continue</p>
         </div>
 
@@ -23,7 +23,7 @@ export default function LoginPage() {
               name="email" 
               type="email" 
               required 
-              className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" 
+              className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" 
               placeholder="you@example.com" 
             />
           </div>
@@ -33,7 +33,7 @@ export default function LoginPage() {
               name="password" 
               type="password" 
               required 
-              className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" 
+              className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" 
               placeholder="••••••••" 
             />
           </div>

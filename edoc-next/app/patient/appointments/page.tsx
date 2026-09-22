@@ -23,9 +23,9 @@ export default async function PatientAppointments() {
 
   return (
     <div>
-      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight">My Bookings</h1>
+      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight animate-fade-in-up">My Bookings</h1>
 
-      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl border border-white/10 overflow-hidden">
+      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl transition-all duration-300 ease-out animate-fade-in-up border border-white/10 overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-white/5 border-b border-white/10">
@@ -38,7 +38,7 @@ export default async function PatientAppointments() {
           </thead>
           <tbody>
             {appointments.map((app) => (
-              <tr key={app.id} className="border-b border-white/5 hover:bg-white/10 transition-colors">
+              <tr key={app.id} className="border-b border-white/5 hover:bg-white/[0.04] transition-colors duration-200 ease-out">
                 <td className="p-4">{app.apponum}</td>
                 <td className="p-4 font-medium">{app.schedule.title}</td>
                 <td className="p-4">Dr. {app.schedule.doctor.docname}</td>

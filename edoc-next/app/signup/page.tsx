@@ -22,7 +22,7 @@ export default function SignupPage() {
     <div className="flex min-h-screen items-center justify-center bg-[#050505] py-12">
       <div className="w-full max-w-md p-8 space-y-6 bg-white/5 rounded-xl shadow-md">
         <div className="text-center">
-          <h1 className="text-3xl font-bold">Create Account</h1>
+          <h1 className="text-3xl font-bold animate-fade-in-up">Create Account</h1>
           <p className="mt-2 text-sm text-zinc-400">Register as a new patient</p>
         </div>
 
@@ -35,33 +35,33 @@ export default function SignupPage() {
         <form action={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-zinc-300">Full Name</label>
-            <input name="pname" type="text" required className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" placeholder="John Doe" />
+            <input name="pname" type="text" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" placeholder="John Doe" />
           </div>
           <div>
             <label className="block text-sm font-medium text-zinc-300">Email Address</label>
-            <input name="email" type="email" required className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" placeholder="you@example.com" />
+            <input name="email" type="email" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" placeholder="you@example.com" />
           </div>
           <div>
             <label className="block text-sm font-medium text-zinc-300">Password</label>
-            <input name="password" type="password" required className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" placeholder="••••••••" />
+            <input name="password" type="password" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" placeholder="••••••••" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-zinc-300">NIC Number</label>
-              <input name="pnic" type="text" required className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" />
+              <input name="pnic" type="text" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" />
             </div>
             <div>
               <label className="block text-sm font-medium text-zinc-300">Date of Birth</label>
-              <input name="pdob" type="date" required className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" />
+              <input name="pdob" type="date" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" />
             </div>
           </div>
           <div>
             <label className="block text-sm font-medium text-zinc-300">Phone Number</label>
-            <input name="ptel" type="tel" required className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" />
+            <input name="ptel" type="tel" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" />
           </div>
           <div>
             <label className="block text-sm font-medium text-zinc-300">Address</label>
-            <textarea name="paddress" required className="w-full px-3 py-2 mt-1 bg-white/5 border border-white/10 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-white/30 focus:ring-1 focus:ring-white/30 transition-all" rows={2}></textarea>
+            <textarea name="paddress" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" rows={2}></textarea>
           </div>
           
           <button 
