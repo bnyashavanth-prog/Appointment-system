@@ -1,0 +1,84 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  admin
+  doctor
+  patient
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      Role
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  admin   Admin?
+  doctor  Doctor?
+  patient Patient?
+}
+
+model Admin {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Specialty {
+  id      Int      @id @default(autoincrement())
+  sname   String
+  doctors Doctor[]
+}
+
+model Doctor {
+  id          Int      @id @default(autoincrement())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  docname     String
+  docnic      String
+  doctel      String
+  specialtyId Int
+  specialty   Specialty @relation(fields: [specialtyId], references: [id])
+  schedules   Schedule[]
+}
+
+model Patient {
+  id           Int           @id @default(autoincrement())
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pname        String
+  paddress     String
+  pnic         String
+  pdob         DateTime
+  ptel         String
+  appointments Appointment[]
+}
+
+model Schedule {
+  id           Int           @id @default(autoincrement())
+  doctorId     Int
+  doctor       Doctor        @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+  title        String
+  scheduledate DateTime      @db.Date
+  scheduletime DateTime      @db.Time
+  nop          Int
+  appointments Appointment[]
+}
+
+model Appointment {
+  id         Int      @id @default(autoincrement())
+  patientId  Int
+  patient    Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  apponum    Int
+  scheduleId Int
+  schedule   Schedule @relation(fields: [scheduleId], references: [id], onDelete: Cascade)
+  appodate   DateTime @db.Date
+}
