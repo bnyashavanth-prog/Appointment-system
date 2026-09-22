@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 const { auth } = NextAuth(authConfig)
 
-export default auth((req) => {
+const middleware = auth((req) => {
   const { nextUrl } = req
   const isLoggedIn = !!req.auth
   const role = req.auth?.user?.role
@@ -43,6 +43,30 @@ export default auth((req) => {
 
   return NextResponse.next()
 })
+
+export default async function (req: any, ctx: any) {
+  try {
+    const res = await middleware(req, ctx)
+    
+    // Intercept NextAuth 403 Forbidden errors (caused by changed AUTH_SECRET)
+    if (res && res.status === 403) {
+      const redirect = NextResponse.redirect(new URL('/login', req.nextUrl))
+      redirect.cookies.delete('authjs.session-token')
+      redirect.cookies.delete('__Secure-authjs.session-token')
+      redirect.cookies.delete('authjs.csrf-token')
+      redirect.cookies.delete('__Host-authjs.csrf-token')
+      return redirect
+    }
+    
+    return res
+  } catch (error) {
+    console.error("Middleware error:", error)
+    const redirect = NextResponse.redirect(new URL('/login', req.nextUrl))
+    redirect.cookies.delete('authjs.session-token')
+    redirect.cookies.delete('__Secure-authjs.session-token')
+    return redirect
+  }
+}
 
 export const config = {
   matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
