@@ -19,26 +19,26 @@ export default auth((req) => {
 
   if (isLoginRoute) {
     if (isLoggedIn) {
-      if (role === 'admin') return Response.redirect(new URL('/admin', nextUrl))
-      if (role === 'doctor') return Response.redirect(new URL('/doctor', nextUrl))
-      if (role === 'patient') return Response.redirect(new URL('/patient', nextUrl))
+      if (role === 'admin') return NextResponse.redirect(new URL('/admin', nextUrl))
+      if (role === 'doctor') return NextResponse.redirect(new URL('/doctor', nextUrl))
+      if (role === 'patient') return NextResponse.redirect(new URL('/patient', nextUrl))
     }
     return NextResponse.next()
   }
 
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL('/login', nextUrl))
+    return NextResponse.redirect(new URL('/login', nextUrl))
   }
 
   // Role-based protection
   if (nextUrl.pathname.startsWith('/admin') && role !== 'admin') {
-    return Response.redirect(new URL('/login', nextUrl))
+    return NextResponse.redirect(new URL('/login', nextUrl))
   }
   if (nextUrl.pathname.startsWith('/doctor') && role !== 'doctor') {
-    return Response.redirect(new URL('/login', nextUrl))
+    return NextResponse.redirect(new URL('/login', nextUrl))
   }
   if (nextUrl.pathname.startsWith('/patient') && role !== 'patient') {
-    return Response.redirect(new URL('/login', nextUrl))
+    return NextResponse.redirect(new URL('/login', nextUrl))
   }
 
   return NextResponse.next()
