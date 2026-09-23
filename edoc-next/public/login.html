@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eDoc — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =========================================================
+       RESET & BASE
+       ========================================================= */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: #1F2937;
+      background: #EAF6F1;
+    }
+
+    /* =========================================================
+       LAYOUT — SPLIT SCREEN
+       ========================================================= */
+    .page {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+    }
+
+    .panel-left {
+      position: relative;
+      width: 60%;
+      height: 100%;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .panel-right {
+      position: relative;
+      width: 40%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      z-index: 2;
+    }
+
+    /* =========================================================
+       DECORATIVE BODY-LEVEL BACKGROUND SHAPES (parallax)
+       ========================================================= */
+    .bg-shapes {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .bg-shapes .shape {
+      position: absolute;
+      transition: transform 0.3s ease-out;
+    }
+    /* Large blurred orbs */
+    .shape.orb-1 {
+      width: 420px; height: 420px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(15,118,110,0.08) 0%, transparent 70%);
+      top: -100px; right: -80px;
+      filter: blur(60px);
+    }
+    .shape.orb-2 {
+      width: 350px; height: 350px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(110,231,183,0.10) 0%, transparent 70%);
+      bottom: -60px; left: 30%;
+      filter: blur(50px);
+    }
+    /* Dashed line */
+    .shape.dash-line {
+      top: 35%; right: 8%;
+      width: 180px; height: 0;
+      border-top: 2px dashed rgba(15,118,110,0.08);
+      transform: rotate(-25deg);
+    }
+    /* Plus mark */
+    .shape.plus {
+      top: 22%; right: 18%;
+      font-size: 32px;
+      font-weight: 300;
+      color: rgba(15,118,110,0.07);
+      line-height: 1;
+    }
+    /* Faint icon outlines */
+    .shape.bg-icon {
+      color: rgba(15,118,110,0.05);
+    }
+    .shape.bg-icon-1 { bottom: 18%; right: 5%; }
+    .shape.bg-icon-2 { top: 60%; right: 32%; }
+
+    /* =========================================================
+       LEFT PANEL — VIDEO BACKGROUND
+       ========================================================= */
+    .video-wrap {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    /* --- Ken Burns zoom on the video container --- */
+    .video-wrap video,
+    .video-wrap .video-fallback {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      animation: kenBurns 20s ease-in-out alternate infinite;
+    }
+    @keyframes kenBurns {
+      0%   { transform: scale(1); }
+      100% { transform: scale(1.06); }
+    }
+
+    /* Fallback static gradient when video fails */
+    .video-wrap .video-fallback {
+      background: linear-gradient(135deg, #d1fae5 0%, #99f6e4 40%, #5eead4 100%);
+    }
+
+    /* Gradient overlay on top of video */
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(232,245,240,0.55), rgba(15,118,110,0.25));
+      z-index: 1;
+    }
+
+    /* =========================================================
+       LEFT PANEL — FLOATING MEDICAL ICONS
+       ========================================================= */
+    .float-icon {
+      position: absolute;
+      z-index: 2;
+      color: rgba(15,118,110,0.12);
+      pointer-events: none;
+    }
+    .float-icon svg { width: 100%; height: 100%; }
+
+    .float-icon.ic-stethoscope { top: 8%; left: 6%;  width: 72px; height: 72px; animation: floatA 6s ease-in-out infinite; }
+    .float-icon.ic-pill        { top: 14%; right: 12%; width: 56px; height: 56px; animation: floatB 5s ease-in-out 0.5s infinite; }
+    .float-icon.ic-clipboard   { bottom: 22%; left: 10%; width: 64px; height: 64px; animation: floatC 5.5s ease-in-out 1s infinite; }
+    .float-icon.ic-heartbeat   { top: 48%; right: 8%;  width: 68px; height: 68px; animation: floatD 4.5s ease-in-out 1.5s infinite; }
+
+    /* --- Float keyframes (each slightly different for organic motion) --- */
+    @keyframes floatA { 0%,100% { transform: translateY(0) rotate(0deg); }   50% { transform: translateY(-10px) rotate(3deg); } }
+    @keyframes floatB { 0%,100% { transform: translateY(0); }                50% { transform: translateY(10px); } }
+    @keyframes floatC { 0%,100% { transform: translateY(0) rotate(0deg); }   50% { transform: translateY(-8px) rotate(-2deg); } }
+    @keyframes floatD { 0%,100% { transform: translateY(0); }                50% { transform: translateY(12px); } }
+
+    /* =========================================================
+       LEFT PANEL — ECG HEARTBEAT LINE
+       ========================================================= */
+    .ecg-line {
+      position: absolute;
+      bottom: 40px;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.30;
+    }
+    .ecg-line svg { width: 100%; height: 100%; }
+    .ecg-line .ecg-path {
+      stroke: #0F766E;
+      stroke-width: 2;
+      fill: none;
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      animation: drawEcg 3s linear infinite;
+    }
+    @keyframes drawEcg {
+      0%   { stroke-dashoffset: 1200; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .ecg-dot {
+      fill: #0F766E;
+      filter: drop-shadow(0 0 4px rgba(15,118,110,0.7));
+    }
+
+    /* =========================================================
+       RIGHT PANEL — LOGIN CARD
+       ========================================================= */
+    .login-card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow:
+        0 4px 6px rgba(0,0,0,0.03),
+        0 12px 24px rgba(0,0,0,0.06),
+        0 0 0 1px rgba(255,255,255,0.6) inset;
+      position: relative;
+      z-index: 10;
+
+      /* Entrance animation */
+      opacity: 0;
+      transform: translateY(24px);
+      animation: cardIn 0.6s ease-out 0.6s forwards;
+    }
+    @keyframes cardIn {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Avatar badge with pulse ring --- */
+    .avatar-badge {
+      width: 64px; height: 64px;
+      margin: 0 auto 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .avatar-badge .ring {
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 2px solid rgba(15,118,110,0.15);
+      animation: pulseRing 2.5s ease-in-out infinite;
+    }
+    @keyframes pulseRing {
+      0%,100% { transform: scale(1); opacity: 0.6; }
+      50%     { transform: scale(1.18); opacity: 0; }
+    }
+    .avatar-badge .circle {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      background: #E8FBF3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .avatar-badge .circle svg {
+      width: 28px; height: 28px;
+      color: #0F766E;
+    }
+
+    /* --- Headings --- */
+    .card-title {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 700;
+      color: #1F2937;
+      margin-bottom: 4px;
+    }
+    .card-subtitle {
+      text-align: center;
+      font-size: 14px;
+      color: #6B7280;
+      margin-bottom: 28px;
+    }
+
+    /* --- Form fields --- */
+    .field {
+      margin-bottom: 18px;
+      position: relative;
+    }
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      margin-bottom: 6px;
+    }
+    .field .input-wrap {
+      position: relative;
+    }
+    .field input {
+      width: 100%;
+      padding: 13px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      background: #EEF2F9;
+      color: #1F2937;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .field input::placeholder { color: #9CA3AF; }
+
+    /* Focus glow + lift */
+    .field input:focus {
+      border-color: #0F766E;
+      box-shadow: 0 0 0 3px rgba(15,118,110,0.12);
+      transform: translateY(-2px);
+      background: #fff;
+    }
+
+    /* Error state */
+    .field input.error {
+      border-color: #EF4444;
+      animation: fieldShake 0.4s ease;
+    }
+    .field .error-text {
+      font-size: 12px;
+      color: #EF4444;
+      margin-top: 5px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: all 0.25s ease;
+    }
+    .field .error-text.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* --- Shake keyframes --- */
+    @keyframes fieldShake {
+      0%, 100% { transform: translateX(0); }
+      20%      { transform: translateX(-6px); }
+      40%      { transform: translateX(6px); }
+      60%      { transform: translateX(-4px); }
+      80%      { transform: translateX(4px); }
+    }
+
+    /* Password toggle button */
+    .pw-toggle {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #9CA3AF;
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.15s;
+    }
+    .pw-toggle:hover, .pw-toggle:focus-visible { color: #0F766E; }
+    .pw-toggle svg { width: 20px; height: 20px; }
+
+    .field input[type="password"],
+    .field input.pw-input {
+      padding-right: 44px;
+    }
+
+    /* --- Submit button --- */
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      color: #fff;
+      background: #0F766E;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.2s, transform 0.15s;
+      margin-top: 6px;
+    }
+    .btn-login:hover { background: #0d645e; transform: scale(1.02); }
+    .btn-login:active { transform: scale(0.98); }
+    .btn-login:focus-visible { outline: 3px solid rgba(15,118,110,0.4); outline-offset: 2px; }
+
+    /* Ripple span injected by JS */
+    .btn-login .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      transform: scale(0);
+      animation: rippleExpand 0.6s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes rippleExpand {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* Spinner inside button */
+    .btn-login .spinner {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 3px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Checkmark success */
+    .btn-login .checkmark {
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .btn-login .checkmark svg {
+      width: 24px; height: 24px;
+      stroke: #fff;
+      stroke-width: 3;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .btn-login .checkmark svg .check-path {
+      stroke-dasharray: 30;
+      stroke-dashoffset: 30;
+      animation: drawCheck 0.4s ease forwards;
+    }
+    @keyframes drawCheck {
+      to { stroke-dashoffset: 0; }
+    }
+
+    /* --- Footer link --- */
+    .card-footer {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 14px;
+      color: #6B7280;
+    }
+    .card-footer a {
+      color: #0F766E;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-block;
+    }
+    .card-footer a:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transform: scale(1.04);
+    }
+
+    /* =========================================================
+       RESPONSIVE — MOBILE < 768px
+       ========================================================= */
+    @media (max-width: 767px) {
+      .panel-left { display: none; }
+      .panel-right { width: 100%; }
+      .login-card { padding: 32px 24px; }
+
+      /* Show floating icons in the body background on mobile */
+      .mobile-float-icons {
+        display: block !important;
+      }
+    }
+    @media (min-width: 768px) {
+      .mobile-float-icons { display: none !important; }
+    }
+
+    /* Mobile floating icons (only visible <768px) */
+    .mobile-float-icons {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      display: none;
+    }
+    .mobile-float-icons .mfi {
+      position: absolute;
+      color: rgba(15,118,110,0.08);
+    }
+    .mobile-float-icons .mfi-1 { top: 8%; left: 6%; width: 56px; animation: floatA 6s ease-in-out infinite; }
+    .mobile-float-icons .mfi-2 { top: 18%; right: 10%; width: 48px; animation: floatB 5s ease-in-out 0.5s infinite; }
+    .mobile-float-icons .mfi-3 { bottom: 12%; left: 14%; width: 52px; animation: floatC 5.5s ease-in-out 1s infinite; }
+
+    /* =========================================================
+       PREFERS-REDUCED-MOTION — kill all animations
+       ========================================================= */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .login-card { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== BODY-LEVEL DECORATIVE SHAPES (parallax on mouse) ========== -->
+  <div class="bg-shapes" id="bgShapes">
+    <div class="shape orb-1" data-speed="0.02"></div>
+    <div class="shape orb-2" data-speed="0.015"></div>
+    <div class="shape dash-line" data-speed="0.01"></div>
+    <div class="shape plus" data-speed="0.025">+</div>
+    <div class="shape bg-icon bg-icon-1" data-speed="0.018">
+      <!-- Clipboard outline -->
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+        <rect x="9" y="3" width="6" height="4" rx="1"/>
+        <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+      </svg>
+    </div>
+    <div class="shape bg-icon bg-icon-2" data-speed="0.012">
+      <!-- Pill outline -->
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.5 1.5l-8 8a4.95 4.95 0 0 0 7 7l8-8a4.95 4.95 0 0 0-7-7z"/>
+        <line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ========== MOBILE FLOATING ICONS (visible < 768px only) ========== -->
+  <div class="mobile-float-icons">
+    <div class="mfi mfi-1">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6 6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/>
+        <path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/>
+      </svg>
+    </div>
+    <div class="mfi mfi-2">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10.5 1.5l-8 8a4.95 4.95 0 0 0 7 7l8-8a4.95 4.95 0 0 0-7-7z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/>
+      </svg>
+    </div>
+    <div class="mfi mfi-3">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
+        <line x1="3" y1="10" x2="21" y2="10"/><path d="M9 16l2 2 4-4"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- ========== PAGE LAYOUT ========== -->
+  <div class="page">
+
+    <!-- LEFT PANEL -->
+    <div class="panel-left">
+      <!-- Video background with fallback -->
+      <div class="video-wrap">
+        <div class="video-fallback" id="videoFallback"></div>
+        <video
+          id="bgVideo"
+          autoplay loop muted playsinline
+          style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"
+          oncanplay="this.style.display='block'; document.getElementById('videoFallback').style.display='none';"
+          onerror="this.style.display='none';"
+        >
+          <source src="assets/doctors-walking.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <!-- Gradient overlay -->
+      <div class="video-overlay"></div>
+
+      <!-- Floating medical icons -->
+      <div class="float-icon ic-stethoscope">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4.8 2.3A.3.3 0 1 0 5 2H4a2 2 0 0 0-2 2v5a6 6 0 0 0 6 6 6 6 0 0 0 6-6V4a2 2 0 0 0-2-2h-1a.2.2 0 1 0 .3.3"/>
+          <path d="M8 15v1a6 6 0 0 0 6 6 6 6 0 0 0 6-6v-4"/><circle cx="20" cy="10" r="2"/>
+        </svg>
+      </div>
+      <div class="float-icon ic-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.5 1.5l-8 8a4.95 4.95 0 0 0 7 7l8-8a4.95 4.95 0 0 0-7-7z"/><line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/>
+        </svg>
+      </div>
+      <div class="float-icon ic-clipboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/>
+          <rect x="9" y="3" width="6" height="4" rx="1"/>
+          <line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/>
+        </svg>
+      </div>
+      <div class="float-icon ic-heartbeat">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+
+      <!-- ECG heartbeat line -->
+      <div class="ecg-line">
+        <svg viewBox="0 0 1000 80" preserveAspectRatio="none">
+          <path class="ecg-path"
+            d="M0,40 L150,40 L170,15 L185,65 L200,40 L350,40 L370,10 L385,70 L400,40
+               L550,40 L570,15 L585,65 L600,40 L750,40 L770,10 L785,70 L800,40 L1000,40" />
+          <circle class="ecg-dot" r="4">
+            <animateMotion dur="3s" repeatCount="indefinite"
+              path="M0,40 L150,40 L170,15 L185,65 L200,40 L350,40 L370,10 L385,70 L400,40
+                     L550,40 L570,15 L585,65 L600,40 L750,40 L770,10 L785,70 L800,40 L1000,40" />
+          </circle>
+        </svg>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="panel-right">
+      <div class="login-card" id="loginCard">
+
+        <!-- Avatar badge -->
+        <div class="avatar-badge">
+          <div class="ring"></div>
+          <div class="circle">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+        </div>
+
+        <h1 class="card-title">Welcome Back</h1>
+        <p class="card-subtitle">Sign in to your account</p>
+
+        <form id="loginForm" novalidate>
+          <!-- Email -->
+          <div class="field">
+            <label for="email">Email Address</label>
+            <div class="input-wrap">
+              <input type="email" id="email" name="email" placeholder="doctor@edoc.com" autocomplete="email" required />
+            </div>
+            <div class="error-text" id="emailError">Please enter a valid email address.</div>
+          </div>
+
+          <!-- Password -->
+          <div class="field">
+            <label for="password">Password</label>
+            <div class="input-wrap">
+              <input type="password" id="password" name="password" class="pw-input" placeholder="••••••••" autocomplete="current-password" required />
+              <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
+                <!-- Eye icon (shown by default) -->
+                <svg id="eyeOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+                <!-- Eye-off icon (hidden by default) -->
+                <svg id="eyeOff" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                  <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>
+                </svg>
+              </button>
+            </div>
+            <div class="error-text" id="passwordError">Password is required.</div>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn-login" id="btnLogin">
+            <span id="btnLabel">Login</span>
+          </button>
+        </form>
+
+        <div class="card-footer">
+          Don't have an account? <a href="/signup">Sign Up</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT — interactions, ripple, parallax, form validation
+       ============================================================ -->
+  <script>
+    (function () {
+      "use strict";
+
+      // --- PASSWORD TOGGLE ---
+      const pwInput  = document.getElementById("password");
+      const pwToggle = document.getElementById("pwToggle");
+      const eyeOpen  = document.getElementById("eyeOpen");
+      const eyeOff   = document.getElementById("eyeOff");
+
+      pwToggle.addEventListener("click", () => {
+        const isPassword = pwInput.type === "password";
+        pwInput.type = isPassword ? "text" : "password";
+        eyeOpen.style.display = isPassword ? "none" : "block";
+        eyeOff.style.display  = isPassword ? "block" : "none";
+        pwToggle.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
+      });
+
+      // --- RIPPLE EFFECT ---
+      const btnLogin = document.getElementById("btnLogin");
+
+      btnLogin.addEventListener("click", function (e) {
+        const rect = this.getBoundingClientRect();
+        const ripple = document.createElement("span");
+        ripple.className = "ripple";
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + "px";
+        ripple.style.left = (e.clientX - rect.left - size / 2) + "px";
+        ripple.style.top  = (e.clientY - rect.top  - size / 2) + "px";
+        this.appendChild(ripple);
+        ripple.addEventListener("animationend", () => ripple.remove());
+      });
+
+      // --- FORM VALIDATION + SIMULATED SUBMIT ---
+      const form       = document.getElementById("loginForm");
+      const emailInput = document.getElementById("email");
+      const emailError = document.getElementById("emailError");
+      const pwError    = document.getElementById("passwordError");
+      const btnLabel   = document.getElementById("btnLabel");
+      let isSubmitting = false;
+
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        if (isSubmitting) return;
+
+        // Reset errors
+        emailInput.classList.remove("error");
+        pwInput.classList.remove("error");
+        emailError.classList.remove("visible");
+        pwError.classList.remove("visible");
+
+        let valid = true;
+
+        // Validate email
+        if (!emailInput.value.trim() || !emailInput.value.includes("@")) {
+          emailInput.classList.add("error");
+          emailError.classList.add("visible");
+          valid = false;
+        }
+
+        // Validate password
+        if (!pwInput.value.trim()) {
+          pwInput.classList.add("error");
+          pwError.classList.add("visible");
+          valid = false;
+        }
+
+        if (!valid) return;
+
+        // Simulate login
+        isSubmitting = true;
+        btnLogin.disabled = true;
+        btnLogin.style.pointerEvents = "none";
+        btnLabel.innerHTML = '<span class="spinner"></span>';
+
+        setTimeout(() => {
+          // Show success checkmark
+          btnLogin.style.background = "#059669";
+          btnLabel.innerHTML = '<span class="checkmark"><svg viewBox="0 0 24 24"><path class="check-path" d="M5 13l4 4L19 7"/></svg></span>';
+
+          setTimeout(() => {
+            // Reset for demo
+            btnLogin.style.background = "";
+            btnLabel.textContent = "Login";
+            btnLogin.disabled = false;
+            btnLogin.style.pointerEvents = "";
+            isSubmitting = false;
+          }, 1500);
+        }, 1200);
+      });
+
+      // Clear error on input
+      emailInput.addEventListener("input", () => {
+        emailInput.classList.remove("error");
+        emailError.classList.remove("visible");
+      });
+      pwInput.addEventListener("input", () => {
+        pwInput.classList.remove("error");
+        pwError.classList.remove("visible");
+      });
+
+      // --- MOUSE PARALLAX ON BACKGROUND SHAPES ---
+      const shapes = document.querySelectorAll("#bgShapes .shape");
+
+      document.addEventListener("mousemove", (e) => {
+        const cx = e.clientX / window.innerWidth  - 0.5; // -0.5 to 0.5
+        const cy = e.clientY / window.innerHeight - 0.5;
+
+        shapes.forEach((shape) => {
+          const speed = parseFloat(shape.dataset.speed) || 0.01;
+          const x = cx * speed * 1000; // max ~10px
+          const y = cy * speed * 1000;
+          shape.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
+
+      // --- VIDEO FALLBACK ---
+      const video = document.getElementById("bgVideo");
+      video.addEventListener("error", () => {
+        video.style.display = "none";
+      });
+    })();
+  </script>
+</body>
+</html>
