@@ -39,7 +39,7 @@ export default function LoginPage() {
           </div>
           <button 
             type="submit" 
-            className="w-full px-4 py-2 text-white bg-blue-600 rounded-xl hover:backdrop-blur-2xl bg-white/[0.03] border-r border-white/10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="w-full px-4 py-2 text-black bg-white rounded-xl hover:bg-zinc-200 transition-all duration-300 shadow-lg hover:-translate-y-0.5 active:scale-[0.97] font-medium"
           >
             Login
           </button>

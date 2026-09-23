@@ -67,13 +67,8 @@ export async function deleteDoctor(doctorId: number) {
   const doctor = await prisma.doctor.findUnique({ where: { id: doctorId } })
   if (!doctor) return
 
+  // Delete user — cascade in schema will delete the doctor record too
   await prisma.user.delete({ where: { id: doctor.userId } })
-  // Casade will delete the doctor record (if configured), otherwise delete doctor first.
-  // We didn't set cascade in schema, so let's delete manually in transaction
-  await prisma.$transaction([
-    prisma.doctor.delete({ where: { id: doctorId } }),
-    prisma.user.delete({ where: { id: doctor.userId } })
-  ])
 
   revalidatePath('/admin/doctors')
 }

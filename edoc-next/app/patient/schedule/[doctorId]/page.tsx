@@ -25,7 +25,7 @@ export default async function DoctorSchedule({ params }: { params: Promise<{ doc
   return (
     <div>
       <h1 className="text-3xl font-bold mb-2 animate-fade-in-up">Dr. {doctor.docname}'s Schedule</h1>
-      <p className="text-zinc-400 mb-8">{doctor.specialty.sname}</p>
+      <p className="text-zinc-400 mb-8">{doctor.specialty?.sname || 'General'}</p>
 
       <div className="space-y-4">
         {schedules.map(schedule => {
@@ -49,7 +49,7 @@ export default async function DoctorSchedule({ params }: { params: Promise<{ doc
                 <button 
                   type="submit"
                   disabled={isFull}
-                  className="px-6 py-2 bg-blue-600 text-white rounded hover:backdrop-blur-2xl bg-white/[0.03] border-r border-white/10 disabled:bg-gray-300 disabled:cursor-not-allowed"
+                  className="px-6 py-2 bg-white text-black rounded-xl hover:bg-zinc-200 transition-all duration-300 shadow-lg hover:-translate-y-0.5 active:scale-[0.97] font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isFull ? 'Full' : 'Book Now'}
                 </button>

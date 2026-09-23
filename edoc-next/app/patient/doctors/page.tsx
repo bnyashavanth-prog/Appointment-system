@@ -17,7 +17,7 @@ export default async function DoctorsList() {
         {doctors.map(doctor => (
           <div key={doctor.id} className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up">
             <h2 className="text-xl font-bold">{doctor.docname}</h2>
-            <p className="text-zinc-400 mb-4">{doctor.specialty.sname}</p>
+            <p className="text-zinc-400 mb-4">{doctor.specialty?.sname || 'General'}</p>
             
             <div className="space-y-2 mb-6 text-sm">
               <p><strong>Email:</strong> {doctor.user.email}</p>
@@ -26,7 +26,7 @@ export default async function DoctorsList() {
 
             <Link 
               href={`/patient/schedule/${doctor.id}`}
-              className="block w-full text-center bg-blue-50 text-blue-700 py-2 rounded-xl hover:bg-blue-100 font-medium"
+              className="block w-full text-center bg-white text-black py-2 rounded-xl hover:bg-zinc-200 font-medium transition-all duration-300 hover:-translate-y-0.5 active:scale-[0.97]"
             >
               View Schedule & Book
             </Link>
