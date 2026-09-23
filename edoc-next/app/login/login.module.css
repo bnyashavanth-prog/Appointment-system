@@ -21,7 +21,60 @@
   50% { background-position: 100% 100%; }
 }
 
+/* ===== Page Load Intro Sequence ===== */
+.introBg { animation: introFade 0.8s ease-out both; }
+.introVideo { animation: introFade 1s ease-out 0.8s both; }
+.introOverlay { animation: introFade 1.4s ease-out 1.8s both; }
+.introLogo { animation: introSlideFade 0.4s ease-out 1.8s both; }
+
+/* 2.4s duration starting at 1.8s -> ends at 4.2s */
+.introCard { animation: introCardAnim 2.4s ease-out 1.8s both; }
+.introSkeleton { animation: introSkeletonFade 2.4s ease-out 1.8s both; }
+
+/* Staggered content */
+.introAvatar { animation: introContentFade 0.8s ease-out 3.2s both; }
+.introTitle { animation: introContentFade 0.8s ease-out 3.28s both; }
+.introSub { animation: introContentFade 0.8s ease-out 3.36s both; }
+.introEmail { animation: introContentFade 0.8s ease-out 4.2s both; }
+.introPass { animation: introContentFade 0.8s ease-out 4.35s both; }
+.introBtn { animation: introContentFade 0.8s ease-out 4.5s both; }
+.introFooter { animation: introContentFade 0.8s ease-out 4.65s both; }
+
+@keyframes introFade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@keyframes introSlideFade {
+  0% { opacity: 0; transform: translateX(-20px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes introCardAnim {
+  0% { opacity: 0; transform: translateY(20px); filter: blur(8px); }
+  20% { opacity: 0.5; transform: translateY(0); filter: blur(8px); } /* 1.8s to 2.2s slide up */
+  58.33% { opacity: 0.5; transform: translateY(0); filter: blur(8px); } /* Holds until 3.2s */
+  100% { opacity: 1; transform: translateY(0); filter: blur(0px); } /* Unblurs 3.2s to 4.2s */
+}
+
+@keyframes introSkeletonFade {
+  0%, 58.33% { opacity: 1; display: flex; }
+  75%, 100% { opacity: 0; display: none; }
+}
+
+@keyframes introContentFade {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+
 /* ===== Reduced motion ===== */
 @media (prefers-reduced-motion: reduce) {
   .shake, .gradientBg { animation: none; }
+  
+  .introBg, .introVideo, .introOverlay, .introLogo, .introCard, .introSkeleton, 
+  .introAvatar, .introTitle, .introSub, .introEmail, .introPass, .introBtn, .introFooter {
+    animation: introFade 0.3s ease-out both !important;
+  }
+  .introSkeleton { display: none !important; opacity: 0 !important; animation: none !important; }
 }

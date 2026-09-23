@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { SubmitButton } from "./SubmitButton"
 import { loginAction } from "./actions"
 import { m, LazyMotion, domAnimation, useMotionValue, useTransform, useReducedMotion } from "framer-motion"
@@ -17,12 +17,19 @@ export default function LoginPage() {
   const [passwordValue, setPasswordValue] = useState("")
   
   const shouldReduceMotion = useReducedMotion()
+  const [hasPlayedIntro, setHasPlayedIntro] = useState(false)
+
+  useEffect(() => {
+    if (sessionStorage.getItem("introPlayed")) {
+      setHasPlayedIntro(true)
+    } else {
+      sessionStorage.setItem("introPlayed", "true")
+    }
+  }, [])
 
   // Mouse Parallax values
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
-
-  // Max shift ±8px
   const shiftX = useTransform(mouseX, [-0.5, 0.5], [-8, 8])
   const shiftY = useTransform(mouseY, [-0.5, 0.5], [-8, 8])
 
@@ -35,30 +42,16 @@ export default function LoginPage() {
     mouseY.set(y)
   }
 
-  const containerVariants: any = {
-    hidden: { opacity: 0, y: 24 },
-    show: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut", delay: 0.6, staggerChildren: 0.1 }
-    }
-  }
-
-  const itemVariants: any = {
-    hidden: { opacity: 0, y: 10 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
-  }
-
   return (
     <LazyMotion features={domAnimation}>
       <div 
-        className={`flex flex-col md:flex-row min-h-[100dvh] md:min-h-screen ${styles.gradientBg} relative overflow-x-hidden`}
+        className={`flex flex-col md:flex-row min-h-[100dvh] md:min-h-screen ${styles.gradientBg} relative overflow-x-hidden ${hasPlayedIntro ? styles.skipIntro : ''}`}
         onMouseMove={handleMouseMove}
       >
         {/* RIGHT PANEL DECORATIVE SHAPES (Parallax) */}
         <m.div 
           style={{ x: shiftX, y: shiftY }}
-          className="absolute inset-0 pointer-events-none z-0 right-panel-bg hidden md:block"
+          className={`absolute inset-0 pointer-events-none z-0 right-panel-bg hidden md:block ${styles.introBg}`}
         >
           <m.div 
             animate={shouldReduceMotion ? {} : { rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
@@ -82,18 +75,13 @@ export default function LoginPage() {
         <div className="flex-1 flex flex-col min-h-[100dvh] md:min-h-screen w-full relative z-10 overflow-y-auto overflow-x-hidden">
           
           {/* HEADER BRANDING (in flow on mobile, fixed on desktop) */}
-          <div className="w-full pt-8 px-6 pb-2 md:p-0 md:fixed md:top-10 md:left-10 z-[100] flex justify-start">
-            <m.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
-              className="flex flex-col"
-            >
+          <div className={`w-full pt-8 px-6 pb-2 md:p-0 md:fixed md:top-10 md:left-10 z-[100] flex justify-start ${styles.introLogo}`}>
+            <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <m.div 
                   initial={shouldReduceMotion ? {} : { filter: "drop-shadow(0 0 0 rgba(15,118,110,0))" }}
                   animate={shouldReduceMotion ? {} : { filter: ["drop-shadow(0 0 0 rgba(15,118,110,0))", "drop-shadow(0 0 12px rgba(15,118,110,0.8))", "drop-shadow(0 0 0 rgba(15,118,110,0))"] }}
-                  transition={{ duration: 1, delay: 0.5 }}
+                  transition={{ duration: 1, delay: 2.2 }}
                   className="text-[#0F766E]"
                 >
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -107,122 +95,134 @@ export default function LoginPage() {
               <span className="text-[11px] font-medium text-[#4B5563] mt-1.5 ml-[36px] tracking-wide">
                 Better Care. Healthier Tomorrow.
               </span>
-            </m.div>
+            </div>
           </div>
 
-          {/* CARD CONTAINER (centers the card properly) */}
+          {/* CARD CONTAINER */}
           <div className="flex-1 flex items-center justify-center p-4 py-8 md:p-6 w-full">
-            <m.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="show"
-              className={`w-full max-w-[420px] bg-white/95 backdrop-blur-[10px] rounded-[24px] p-8 md:p-10 shadow-[0_4px_6px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.06)] border border-white/60 ${isShaking && !shouldReduceMotion ? styles.shake : ""}`}
-              onAnimationEnd={() => setIsShaking(false)}
+            <div
+              className={`w-full max-w-[420px] bg-white/95 backdrop-blur-[10px] rounded-[24px] shadow-[0_4px_6px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.06)] border border-white/60 relative ${styles.introCard} ${isShaking && !shouldReduceMotion ? styles.shake : ""}`}
+              onAnimationEnd={(e) => {
+                if (e.animationName.includes('shake')) setIsShaking(false)
+              }}
             >
-              {/* Avatar badge with pulse */}
-              <m.div variants={itemVariants} className="flex justify-center mb-5">
-                <div className="relative w-16 h-16">
-                  <span className="absolute -inset-1.5 rounded-full border-2 border-[#0F766E]/15 animate-[pulseRing_2.5s_ease-in-out_infinite]" />
-                  <div className="w-full h-full rounded-full bg-[#E8FBF3] flex items-center justify-center relative z-10">
-                    <User size={28} className="text-[#0F766E]" />
+              
+              {/* SKELETON PLACEHOLDER */}
+              <div className={`absolute inset-0 rounded-[24px] bg-white/80 backdrop-blur-md flex flex-col items-center justify-start p-10 z-50 pointer-events-none ${styles.introSkeleton}`}>
+                <div className="w-16 h-16 rounded-full bg-slate-200/60 animate-pulse mb-6" />
+                <div className="w-3/4 h-8 rounded-lg bg-slate-200/60 animate-pulse mb-10" />
+                <div className="w-full h-12 rounded-xl bg-slate-200/60 animate-pulse mb-4" />
+                <div className="w-full h-12 rounded-xl bg-slate-200/60 animate-pulse mb-6" />
+                <div className="w-full h-12 rounded-xl bg-teal-600/20 animate-pulse" />
+              </div>
+
+              {/* REAL CONTENT */}
+              <div className="p-8 md:p-10">
+                {/* Avatar badge */}
+                <div className={`flex justify-center mb-5 ${styles.introAvatar}`}>
+                  <div className="relative w-16 h-16">
+                    <span className="absolute -inset-1.5 rounded-full border-2 border-[#0F766E]/15 animate-[pulseRing_2.5s_ease-in-out_infinite]" />
+                    <div className="w-full h-full rounded-full bg-[#E8FBF3] flex items-center justify-center relative z-10">
+                      <User size={28} className="text-[#0F766E]" />
+                    </div>
                   </div>
                 </div>
-              </m.div>
 
-              <m.h1 variants={itemVariants} className="text-center text-[26px] font-bold text-[#1F2937] mb-1">Welcome Back</m.h1>
-              <m.p variants={itemVariants} className="text-center text-sm text-[#6B7280] mb-7">Sign in to your account</m.p>
+                <h1 className={`text-center text-[26px] font-bold text-[#1F2937] mb-1 ${styles.introTitle}`}>Welcome Back</h1>
+                <p className={`text-center text-sm text-[#6B7280] mb-7 ${styles.introSub}`}>Sign in to your account</p>
 
-              {error && (
-                <m.div variants={itemVariants} className="mb-5 p-3 text-sm text-red-600 bg-red-50 rounded-xl border border-red-100 text-center font-medium animate-[fadeIn_0.25s_ease]">
-                  {error}
-                </m.div>
-              )}
-
-              <form
-                action={async (formData) => {
-                  setError(null)
-                  const result = await loginAction(formData)
-                  if (result?.error) {
-                    setError(result.error)
-                    setIsShaking(true)
-                  }
-                }}
-                className="space-y-5"
-              >
-                {/* Email */}
-                <m.div variants={itemVariants} className="group">
-                  <label htmlFor="email" className="block text-[13px] font-semibold text-[#374151] mb-1.5 group-focus-within:text-[#0F766E] transition-colors">
-                    Email Address
-                  </label>
-                  <div className="relative">
-                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${emailValue ? 'text-[#0F766E]' : 'text-[#9CA3AF] group-focus-within:text-[#0F766E]'}`}>
-                      <Mail size={18} />
-                    </div>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      required
-                      placeholder="doctor@edoc.com"
-                      autoComplete="email"
-                      value={emailValue}
-                      onChange={(e) => setEmailValue(e.target.value)}
-                      className="w-full pl-11 pr-4 py-3.5 text-[15px] bg-[#EEF2F9] border-2 border-transparent rounded-xl text-[#1F2937] placeholder:text-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#0F766E] focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)] focus:-translate-y-[2px] focus:bg-white"
-                    />
+                {error && (
+                  <div className="mb-5 p-3 text-sm text-red-600 bg-red-50 rounded-xl border border-red-100 text-center font-medium animate-[fadeIn_0.25s_ease]">
+                    {error}
                   </div>
-                </m.div>
+                )}
 
-                {/* Password */}
-                <m.div variants={itemVariants} className="group">
-                  <label htmlFor="password" className="block text-[13px] font-semibold text-[#374151] mb-1.5 group-focus-within:text-[#0F766E] transition-colors">
-                    Password
-                  </label>
-                  <div className="relative">
-                    <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${passwordValue ? 'text-[#0F766E]' : 'text-[#9CA3AF] group-focus-within:text-[#0F766E]'}`}>
-                      <Lock size={18} />
-                    </div>
-                    <input
-                      id="password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      required
-                      placeholder="••••••••"
-                      autoComplete="current-password"
-                      value={passwordValue}
-                      onChange={(e) => setPasswordValue(e.target.value)}
-                      className="w-full pl-11 pr-12 py-3.5 text-[15px] bg-[#EEF2F9] border-2 border-transparent rounded-xl text-[#1F2937] placeholder:text-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#0F766E] focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)] focus:-translate-y-[2px] focus:bg-white"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      aria-label={showPassword ? "Hide password" : "Show password"}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#9CA3AF] hover:text-[#0F766E] transition-colors"
-                    >
-                      <div className="relative w-5 h-5">
-                        <m.div initial={false} animate={{ opacity: showPassword ? 1 : 0 }} transition={{ duration: 0.15 }} className="absolute inset-0">
-                          <EyeOff size={20} />
-                        </m.div>
-                        <m.div initial={false} animate={{ opacity: showPassword ? 0 : 1 }} transition={{ duration: 0.15 }} className="absolute inset-0">
-                          <Eye size={20} />
-                        </m.div>
+                <form
+                  action={async (formData) => {
+                    setError(null)
+                    const result = await loginAction(formData)
+                    if (result?.error) {
+                      setError(result.error)
+                      setIsShaking(true)
+                    }
+                  }}
+                  className="space-y-5"
+                >
+                  {/* Email */}
+                  <div className={`group ${styles.introEmail}`}>
+                    <label htmlFor="email" className="block text-[13px] font-semibold text-[#374151] mb-1.5 group-focus-within:text-[#0F766E] transition-colors">
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${emailValue ? 'text-[#0F766E]' : 'text-[#9CA3AF] group-focus-within:text-[#0F766E]'}`}>
+                        <Mail size={18} />
                       </div>
-                    </button>
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        required
+                        placeholder="doctor@edoc.com"
+                        autoComplete="email"
+                        value={emailValue}
+                        onChange={(e) => setEmailValue(e.target.value)}
+                        className="w-full pl-11 pr-4 py-3.5 text-[15px] bg-[#EEF2F9] border-2 border-transparent rounded-xl text-[#1F2937] placeholder:text-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#0F766E] focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)] focus:-translate-y-[2px] focus:bg-white"
+                      />
+                    </div>
                   </div>
-                </m.div>
 
-                <m.div variants={itemVariants} className="pt-1">
-                  <SubmitButton>Login</SubmitButton>
-                </m.div>
-              </form>
+                  {/* Password */}
+                  <div className={`group ${styles.introPass}`}>
+                    <label htmlFor="password" className="block text-[13px] font-semibold text-[#374151] mb-1.5 group-focus-within:text-[#0F766E] transition-colors">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <div className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors duration-200 ${passwordValue ? 'text-[#0F766E]' : 'text-[#9CA3AF] group-focus-within:text-[#0F766E]'}`}>
+                        <Lock size={18} />
+                      </div>
+                      <input
+                        id="password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        required
+                        placeholder="••••••••"
+                        autoComplete="current-password"
+                        value={passwordValue}
+                        onChange={(e) => setPasswordValue(e.target.value)}
+                        className="w-full pl-11 pr-12 py-3.5 text-[15px] bg-[#EEF2F9] border-2 border-transparent rounded-xl text-[#1F2937] placeholder:text-[#9CA3AF] outline-none transition-all duration-200 focus:border-[#0F766E] focus:shadow-[0_0_0_3px_rgba(15,118,110,0.12)] focus:-translate-y-[2px] focus:bg-white"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        aria-label={showPassword ? "Hide password" : "Show password"}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#9CA3AF] hover:text-[#0F766E] transition-colors"
+                      >
+                        <div className="relative w-5 h-5">
+                          <m.div initial={false} animate={{ opacity: showPassword ? 1 : 0 }} transition={{ duration: 0.15 }} className="absolute inset-0">
+                            <EyeOff size={20} />
+                          </m.div>
+                          <m.div initial={false} animate={{ opacity: showPassword ? 0 : 1 }} transition={{ duration: 0.15 }} className="absolute inset-0">
+                            <Eye size={20} />
+                          </m.div>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
 
-              <m.div variants={itemVariants} className="mt-6 text-center text-sm text-[#6B7280]">
-                Don&apos;t have an account?{" "}
-                <Link href="/signup" className="text-[#0F766E] font-bold relative group inline-block">
-                  Sign Up
-                  <span className="absolute -bottom-0.5 left-0 w-0 h-[2px] bg-[#0F766E] transition-all duration-300 group-hover:w-full" />
-                </Link>
-              </m.div>
-            </m.div>
+                  <div className={`pt-1 ${styles.introBtn}`}>
+                    <SubmitButton>Login</SubmitButton>
+                  </div>
+                </form>
+
+                <div className={`mt-6 text-center text-sm text-[#6B7280] ${styles.introFooter}`}>
+                  Don&apos;t have an account?{" "}
+                  <Link href="/signup" className="text-[#0F766E] font-bold relative group inline-block">
+                    Sign Up
+                    <span className="absolute -bottom-0.5 left-0 w-0 h-[2px] bg-[#0F766E] transition-all duration-300 group-hover:w-full" />
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
