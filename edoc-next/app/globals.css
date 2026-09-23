@@ -50,6 +50,14 @@
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
   }
+  @keyframes kenBurns {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.06); }
+  }
+  @keyframes drawEcg {
+    0% { stroke-dashoffset: 1200; }
+    100% { stroke-dashoffset: 0; }
+  }
 }
 
 :root {
