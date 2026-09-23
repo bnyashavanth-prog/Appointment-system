@@ -9,6 +9,7 @@ A full-stack, role-based web application for managing doctor appointments, moder
 - **Doctor Portal:** Manage available appointment sessions/schedules, view booked patients, and monitor daily schedules.
 - **Patient Portal:** Browse registered doctors, view available slots, book appointments, and cancel existing bookings.
 - **Smart Booking Logic:** Automated capacity checks to ensure sessions never exceed maximum patient limits.
+- **Blazing Fast UI (Suspense Streaming):** Heavy database queries are wrapped in React `<Suspense>`, allowing page layouts to load instantly while data streams seamlessly into sleek loading skeletons, eliminating SSR waterfalls.
 - **Responsive UI:** Clean, mobile-friendly interface built with Tailwind CSS.
 
 ## 🚀 Tech Stack
