@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/db"
-
 import { Suspense } from "react"
+import { SkeletonStats } from "@/components/ui/SkeletonBlock"
 
 async function AdminDashboardStats() {
   const [doctorCount, patientCount, appointmentCount, sessionCount] = await Promise.all([
@@ -10,27 +10,21 @@ async function AdminDashboardStats() {
     prisma.schedule.count()
   ])
 
+  const stats = [
+    { label: "Total Doctors", value: doctorCount, color: "text-primary" },
+    { label: "Total Patients", value: patientCount, color: "text-teal-600" },
+    { label: "Appointments", value: appointmentCount, color: "text-primary" },
+    { label: "Sessions", value: sessionCount, color: "text-teal-600" },
+  ]
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up">
-        <div className="text-zinc-400 text-sm font-medium">Total Doctors</div>
-        <div className="mt-2 text-3xl font-bold text-white">{doctorCount}</div>
-      </div>
-      
-      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up">
-        <div className="text-zinc-400 text-sm font-medium">Total Patients</div>
-        <div className="mt-2 text-3xl font-bold text-white">{patientCount}</div>
-      </div>
-
-      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up">
-        <div className="text-zinc-400 text-sm font-medium">Total Appointments</div>
-        <div className="mt-2 text-3xl font-bold text-white">{appointmentCount}</div>
-      </div>
-
-      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up">
-        <div className="text-zinc-400 text-sm font-medium">Scheduled Sessions</div>
-        <div className="mt-2 text-3xl font-bold text-white">{sessionCount}</div>
-      </div>
+      {stats.map((stat) => (
+        <div key={stat.label} className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div className="text-sm font-medium text-muted-foreground">{stat.label}</div>
+          <div className={`mt-1 text-3xl font-bold ${stat.color}`}>{stat.value}</div>
+        </div>
+      ))}
     </div>
   )
 }
@@ -38,16 +32,8 @@ async function AdminDashboardStats() {
 export default async function AdminDashboard() {
   return (
     <div>
-      <h1 className="text-4xl font-extrabold text-white mb-10 tracking-tight animate-fade-in-up">Admin Dashboard</h1>
-      
-      <Suspense fallback={
-        <div className="animate-pulse grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="h-32 bg-white/10 rounded-3xl"></div>
-          <div className="h-32 bg-white/10 rounded-3xl"></div>
-          <div className="h-32 bg-white/10 rounded-3xl"></div>
-          <div className="h-32 bg-white/10 rounded-3xl"></div>
-        </div>
-      }>
+      <h1 className="text-3xl font-bold text-foreground mb-8">Admin Dashboard</h1>
+      <Suspense fallback={<SkeletonStats count={4} />}>
         <AdminDashboardStats />
       </Suspense>
     </div>

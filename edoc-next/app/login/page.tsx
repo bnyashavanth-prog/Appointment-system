@@ -3,11 +3,16 @@ import { SubmitButton } from "./SubmitButton"
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#050505]">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white/5 rounded-xl shadow-md">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-teal-50 via-white to-slate-50">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg border border-border animate-fade-in-up">
         <div className="text-center">
-          <h1 className="text-3xl font-bold animate-fade-in-up">Welcome Back!</h1>
-          <p className="mt-2 text-sm text-zinc-400">Login with your details to continue</p>
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-teal-50 rounded-xl mb-4">
+            <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold text-foreground">Welcome Back</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Sign in to your account</p>
         </div>
 
         <form action={async (formData) => {
@@ -15,34 +20,34 @@ export default function LoginPage() {
           try {
             await signIn("credentials", formData)
           } catch (error: any) {
-            if (error.name === "RedirectError") throw error; // Next.js redirect
+            if (error.name === "RedirectError") throw error;
           }
         }} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-300">Email Address</label>
+            <label className="block text-sm font-medium text-slate-700">Email Address</label>
             <input 
               name="email" 
               type="email" 
               required 
-              className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" 
+              className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" 
               placeholder="you@example.com" 
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-300">Password</label>
+            <label className="block text-sm font-medium text-slate-700">Password</label>
             <input 
               name="password" 
               type="password" 
               required 
-              className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" 
+              className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" 
               placeholder="••••••••" 
             />
           </div>
           <SubmitButton>Login</SubmitButton>
         </form>
 
-        <div className="text-center text-sm">
-          Don't have an account? <a href="/signup" className="text-white hover:underline">Sign Up</a>
+        <div className="text-center text-sm text-muted-foreground">
+          Don't have an account? <a href="/signup" className="text-primary font-medium hover:underline">Sign Up</a>
         </div>
       </div>
     </div>

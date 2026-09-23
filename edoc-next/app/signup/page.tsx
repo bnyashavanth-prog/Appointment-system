@@ -19,62 +19,67 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#050505] py-12">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white/5 rounded-xl shadow-md">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-teal-50 via-white to-slate-50 py-12">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg border border-border animate-fade-in-up">
         <div className="text-center">
-          <h1 className="text-3xl font-bold animate-fade-in-up">Create Account</h1>
-          <p className="mt-2 text-sm text-zinc-400">Register as a new patient</p>
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-teal-50 rounded-xl mb-4">
+            <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold text-foreground">Create Account</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Register as a new patient</p>
         </div>
 
         {error && (
-          <div className="p-3 text-sm text-red-400 bg-red-500/10 rounded-xl">
+          <div className="p-3 text-sm text-red-700 bg-red-50 rounded-xl border border-red-200">
             {error}
           </div>
         )}
 
         <form action={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-300">Full Name</label>
-            <input name="pname" type="text" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" placeholder="John Doe" />
+            <label className="block text-sm font-medium text-slate-700">Full Name</label>
+            <input name="pname" type="text" required className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" placeholder="John Doe" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-300">Email Address</label>
-            <input name="email" type="email" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" placeholder="you@example.com" />
+            <label className="block text-sm font-medium text-slate-700">Email Address</label>
+            <input name="email" type="email" required className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" placeholder="you@example.com" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-300">Password</label>
-            <input name="password" type="password" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" placeholder="••••••••" />
+            <label className="block text-sm font-medium text-slate-700">Password</label>
+            <input name="password" type="password" required className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" placeholder="••••••••" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-zinc-300">NIC Number</label>
-              <input name="pnic" type="text" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" />
+              <label className="block text-sm font-medium text-slate-700">NIC Number</label>
+              <input name="pnic" type="text" required className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-zinc-300">Date of Birth</label>
-              <input name="pdob" type="date" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" />
+              <label className="block text-sm font-medium text-slate-700">Date of Birth</label>
+              <input name="pdob" type="date" required className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-300">Phone Number</label>
-            <input name="ptel" type="tel" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" />
+            <label className="block text-sm font-medium text-slate-700">Phone Number</label>
+            <input name="ptel" type="tel" required className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-300">Address</label>
-            <textarea name="paddress" required className="w-full px-3 py-2 mt-1 bg-white/[0.04] border border-white/15 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-white/40 focus:bg-white/[0.07] focus:ring-1 focus:ring-white/10 transition-all duration-300" rows={2}></textarea>
+            <label className="block text-sm font-medium text-slate-700">Address</label>
+            <textarea name="paddress" required className="w-full px-4 py-2.5 mt-1 bg-slate-50 border border-border rounded-xl text-foreground placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" rows={2}></textarea>
           </div>
           
           <button 
             type="submit" 
             disabled={pending}
-            className="w-full px-4 py-2 text-black bg-white rounded-xl hover:bg-zinc-200 transition-all duration-300 shadow-lg hover:-translate-y-0.5 active:scale-[0.97] font-medium disabled:opacity-50"
+            className="w-full px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-teal-700 transition-all duration-200 shadow-sm hover:shadow-md font-medium disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
           >
             {pending ? "Creating Account..." : "Sign Up"}
           </button>
         </form>
 
-        <div className="text-center text-sm">
-          Already have an account? <Link href="/login" className="text-white hover:underline">Login</Link>
+        <div className="text-center text-sm text-muted-foreground">
+          Already have an account? <Link href="/login" className="text-primary font-medium hover:underline">Login</Link>
         </div>
       </div>
     </div>

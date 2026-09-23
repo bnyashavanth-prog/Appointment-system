@@ -26,34 +26,34 @@ export default function SessionForm() {
   }
 
   return (
-    <form id="sessionForm" action={handleSubmit} className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up mb-8 space-y-4">
-      <h2 className="text-xl font-bold mb-4">Add New Session</h2>
+    <form id="sessionForm" action={handleSubmit} className="bg-card border border-border shadow-sm p-6 rounded-2xl mb-8 space-y-4">
+      <h2 className="text-lg font-semibold text-foreground">Add New Session</h2>
       
-      {error && <div className="text-red-400 bg-red-500/10 p-2 rounded text-sm">{error}</div>}
+      {error && <div className="text-red-700 bg-red-50 p-3 rounded-xl text-sm border border-red-200">{error}</div>}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
-          <label className="block text-sm font-medium text-zinc-300">Session Title</label>
-          <input name="title" required className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm border px-3 py-2" />
+          <label className="block text-sm font-medium text-slate-700">Session Title</label>
+          <input name="title" required className="mt-1 block w-full rounded-xl border border-border bg-slate-50 px-4 py-2.5 text-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-300">Date</label>
-          <input type="date" name="scheduledate" required className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm border px-3 py-2" />
+          <label className="block text-sm font-medium text-slate-700">Date</label>
+          <input type="date" name="scheduledate" required className="mt-1 block w-full rounded-xl border border-border bg-slate-50 px-4 py-2.5 text-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-300">Time</label>
-          <input type="time" name="scheduletime" required className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm border px-3 py-2" />
+          <label className="block text-sm font-medium text-slate-700">Time</label>
+          <input type="time" name="scheduletime" required className="mt-1 block w-full rounded-xl border border-border bg-slate-50 px-4 py-2.5 text-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-zinc-300">Max Patients</label>
-          <input type="number" name="nop" min="1" required className="mt-1 block w-full rounded-xl border-gray-300 shadow-sm border px-3 py-2" />
+          <label className="block text-sm font-medium text-slate-700">Max Patients</label>
+          <input type="number" name="nop" min="1" required className="mt-1 block w-full rounded-xl border border-border bg-slate-50 px-4 py-2.5 text-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200" />
         </div>
       </div>
       
       <button 
         type="submit" 
         disabled={pending}
-        className="px-4 py-2 bg-emerald-600 text-white rounded-xl hover:backdrop-blur-2xl bg-white/[0.03] border-r border-white/10 disabled:opacity-50 mt-4"
+        className="px-5 py-2.5 bg-primary text-white rounded-xl hover:bg-teal-700 transition-all duration-200 shadow-sm font-medium disabled:opacity-50 cursor-pointer"
       >
         {pending ? "Adding..." : "Add Session"}
       </button>

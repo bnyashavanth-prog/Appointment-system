@@ -1,71 +1,36 @@
 import { auth } from "@/auth"
 import { prisma } from "@/lib/db"
-
 import { Suspense } from "react"
+import { SkeletonStats } from "@/components/ui/SkeletonBlock"
 
 async function DashboardStats({ userId }: { userId: string }) {
-  const doctor = await prisma.doctor.findUnique({
-    where: { userId },
-    include: { specialty: true }
-  })
-
-  const [sessionCount, appointmentCount] = await Promise.all([
-    prisma.schedule.count({
-      where: { doctorId: doctor?.id }
-    }),
-    prisma.appointment.count({
-      where: { schedule: { doctorId: doctor?.id } }
-    })
-  ])
+  const doctor = await prisma.doctor.findUnique({ where: { userId } })
+  const appointmentCount = await prisma.schedule.count({ where: { doctorId: doctor?.id } })
 
   return (
-    <>
-      <h1 className="text-3xl font-bold mb-2 animate-fade-in-up">Welcome, Dr. {doctor?.docname || 'Doctor'}!</h1>
-      <p className="text-zinc-400 mb-8">{doctor?.specialty?.sname || 'No Specialty'}</p>
-      
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up">
-          <div className="text-zinc-400 text-sm font-medium">My Sessions</div>
-          <div className="mt-2 text-3xl font-bold text-white">{sessionCount}</div>
-        </div>
-        
-        <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] p-8 rounded-3xl transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/25 hover:shadow-[0_16px_40px_0_rgba(0,0,0,0.9)] animate-fade-in-up">
-          <div className="text-zinc-400 text-sm font-medium">Total Appointments</div>
-          <div className="mt-2 text-3xl font-bold text-white">{appointmentCount}</div>
-        </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <div className="text-sm font-medium text-muted-foreground">Welcome back</div>
+        <div className="mt-1 text-2xl font-bold text-foreground">{doctor?.docname || 'Doctor'}</div>
       </div>
-    </>
+      <div className="bg-card border border-border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+        <div className="text-sm font-medium text-muted-foreground">Scheduled Sessions</div>
+        <div className="mt-1 text-3xl font-bold text-primary">{appointmentCount}</div>
+      </div>
+    </div>
   )
 }
 
 export default async function DoctorDashboard() {
-  try {
-    const session = await auth()
-    if (!session?.user?.id) return null
+  const session = await auth()
+  if (!session?.user?.id) return null
 
-    return (
-      <div>
-        <Suspense fallback={
-          <div className="animate-pulse">
-            <div className="h-10 bg-white/10 rounded w-1/3 mb-2"></div>
-            <div className="h-4 bg-white/10 rounded w-1/4 mb-8"></div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="h-32 bg-white/10 rounded-3xl"></div>
-              <div className="h-32 bg-white/10 rounded-3xl"></div>
-            </div>
-          </div>
-        }>
-          <DashboardStats userId={session.user.id} />
-        </Suspense>
-      </div>
-    )
-  } catch (error: any) {
-    return (
-      <div className="p-8 bg-red-900/50 text-white rounded-3xl border border-red-500">
-        <h1 className="text-2xl font-bold mb-4">Dashboard Crash Report</h1>
-        <pre className="whitespace-pre-wrap">{error.message || String(error)}</pre>
-        <pre className="whitespace-pre-wrap mt-4 text-sm text-red-200">{error.stack}</pre>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <h1 className="text-3xl font-bold text-foreground mb-8">Dashboard</h1>
+      <Suspense fallback={<SkeletonStats count={2} />}>
+        <DashboardStats userId={session.user.id} />
+      </Suspense>
+    </div>
+  )
 }

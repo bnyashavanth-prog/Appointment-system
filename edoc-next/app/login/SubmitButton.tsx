@@ -9,10 +9,10 @@ export function SubmitButton({ children }: { children: React.ReactNode }) {
     <button 
       type="submit" 
       disabled={pending}
-      className="w-full px-4 py-2 text-black bg-white rounded-xl hover:bg-zinc-200 transition-all duration-300 shadow-lg hover:-translate-y-0.5 active:scale-[0.97] font-medium disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+      className="w-full px-4 py-2.5 bg-primary text-white rounded-xl hover:bg-teal-700 transition-all duration-200 shadow-sm hover:shadow-md font-medium disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
     >
       {pending && (
-        <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
       )}
       {pending ? "Logging in..." : children}
     </button>

@@ -1,44 +1,42 @@
 import { prisma } from "@/lib/db"
 import DoctorForm from "./DoctorForm"
 import { deleteDoctor } from "./actions"
-
 import { Suspense } from "react"
+import { SkeletonTable } from "@/components/ui/SkeletonBlock"
 
 async function AdminDoctorsList() {
   const doctors = await prisma.doctor.findMany({
     include: { specialty: true, user: true }
   })
-  
   const specialties = await prisma.specialty.findMany()
 
   return (
     <>
       <DoctorForm specialties={specialties} />
-
-      <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl transition-all duration-300 ease-out animate-fade-in-up border border-white/10 overflow-hidden">
+      <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-white/5 border-b border-white/10">
-              <th className="p-4 font-medium text-zinc-400">Name</th>
-              <th className="p-4 font-medium text-zinc-400">Email</th>
-              <th className="p-4 font-medium text-zinc-400">Specialty</th>
-              <th className="p-4 font-medium text-zinc-400">Phone</th>
-              <th className="p-4 font-medium text-zinc-400 text-right">Actions</th>
+            <tr className="bg-slate-50 border-b border-border">
+              <th className="p-4 font-medium text-sm text-muted-foreground">Name</th>
+              <th className="p-4 font-medium text-sm text-muted-foreground">Email</th>
+              <th className="p-4 font-medium text-sm text-muted-foreground">Specialty</th>
+              <th className="p-4 font-medium text-sm text-muted-foreground">Phone</th>
+              <th className="p-4 font-medium text-sm text-muted-foreground text-right">Actions</th>
             </tr>
           </thead>
           <tbody>
             {doctors.map((doc) => (
-              <tr key={doc.id} className="border-b border-white/5 hover:bg-white/[0.04] transition-colors duration-200 ease-out">
-                <td className="p-4 font-medium">{doc.docname}</td>
-                <td className="p-4">{doc.user.email}</td>
-                <td className="p-4">{doc.specialty.sname}</td>
-                <td className="p-4">{doc.doctel}</td>
+              <tr key={doc.id} className="border-b border-border last:border-0 hover:bg-slate-50/50 transition-colors">
+                <td className="p-4 text-sm font-medium">{doc.docname}</td>
+                <td className="p-4 text-sm text-muted-foreground">{doc.user.email}</td>
+                <td className="p-4 text-sm"><span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-teal-50 text-teal-700">{doc.specialty.sname}</span></td>
+                <td className="p-4 text-sm text-muted-foreground">{doc.doctel}</td>
                 <td className="p-4 text-right">
                   <form action={async () => {
                     "use server"
                     await deleteDoctor(doc.id)
                   }}>
-                    <button className="text-red-400 hover:text-red-300 text-sm font-medium border border-red-500/20 rounded px-3 py-1 hover:bg-red-500/100/10 transition-colors cursor-pointer">
+                    <button className="text-red-600 hover:text-red-700 hover:bg-red-50 text-sm font-medium border border-red-200 rounded-lg px-3 py-1 transition-colors cursor-pointer">
                       Delete
                     </button>
                   </form>
@@ -46,11 +44,7 @@ async function AdminDoctorsList() {
               </tr>
             ))}
             {doctors.length === 0 && (
-              <tr>
-                <td colSpan={5} className="p-8 text-center text-zinc-400">
-                  No doctors found.
-                </td>
-              </tr>
+              <tr><td colSpan={5} className="p-8 text-center text-muted-foreground">No doctors found.</td></tr>
             )}
           </tbody>
         </table>
@@ -62,16 +56,8 @@ async function AdminDoctorsList() {
 export default async function AdminDoctors() {
   return (
     <div>
-      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight animate-fade-in-up">Doctors</h1>
-      
-      <Suspense fallback={
-        <div className="animate-pulse">
-          <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl h-64 mb-8"></div>
-          <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl h-64 flex items-center justify-center">
-             <div className="text-zinc-500">Loading doctors...</div>
-          </div>
-        </div>
-      }>
+      <h1 className="text-3xl font-bold text-foreground mb-8">Doctors</h1>
+      <Suspense fallback={<SkeletonTable rows={3} cols={5} />}>
         <AdminDoctorsList />
       </Suspense>
     </div>

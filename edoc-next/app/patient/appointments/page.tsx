@@ -1,45 +1,37 @@
 import { prisma } from "@/lib/db"
 import { auth } from "@/auth"
 import { cancelAppointment } from "./actions"
-
 import { Suspense } from "react"
+import { SkeletonTable } from "@/components/ui/SkeletonBlock"
 
 async function PatientAppointmentsList({ userId }: { userId: string }) {
-  const patient = await prisma.patient.findUnique({
-    where: { userId }
-  })
+  const patient = await prisma.patient.findUnique({ where: { userId } })
 
   const appointments = await prisma.appointment.findMany({
     where: { patientId: patient?.id },
-    include: {
-      schedule: {
-        include: { doctor: true }
-      }
-    },
-    orderBy: {
-      schedule: { scheduledate: 'asc' }
-    }
+    include: { schedule: { include: { doctor: true } } },
+    orderBy: { schedule: { scheduledate: 'asc' } }
   })
 
   return (
-    <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl transition-all duration-300 ease-out animate-fade-in-up border border-white/10 overflow-hidden">
+    <div className="bg-card rounded-2xl border border-border shadow-sm overflow-hidden">
       <table className="w-full text-left border-collapse">
         <thead>
-          <tr className="bg-white/5 border-b border-white/10">
-            <th className="p-4 font-medium text-zinc-400">Appointment No.</th>
-            <th className="p-4 font-medium text-zinc-400">Session Title</th>
-            <th className="p-4 font-medium text-zinc-400">Doctor</th>
-            <th className="p-4 font-medium text-zinc-400">Date & Time</th>
-            <th className="p-4 font-medium text-zinc-400 text-right">Actions</th>
+          <tr className="bg-slate-50 border-b border-border">
+            <th className="p-4 font-medium text-sm text-muted-foreground">Appt No.</th>
+            <th className="p-4 font-medium text-sm text-muted-foreground">Session</th>
+            <th className="p-4 font-medium text-sm text-muted-foreground">Doctor</th>
+            <th className="p-4 font-medium text-sm text-muted-foreground">Date & Time</th>
+            <th className="p-4 font-medium text-sm text-muted-foreground text-right">Actions</th>
           </tr>
         </thead>
         <tbody>
           {appointments.map((app) => (
-            <tr key={app.id} className="border-b border-white/5 hover:bg-white/[0.04] transition-colors duration-200 ease-out">
-              <td className="p-4">{app.apponum}</td>
-              <td className="p-4 font-medium">{app.schedule.title}</td>
-              <td className="p-4">Dr. {app.schedule.doctor.docname}</td>
-              <td className="p-4">
+            <tr key={app.id} className="border-b border-border last:border-0 hover:bg-slate-50/50 transition-colors">
+              <td className="p-4 text-sm">{app.apponum}</td>
+              <td className="p-4 text-sm font-medium">{app.schedule.title}</td>
+              <td className="p-4 text-sm">Dr. {app.schedule.doctor.docname}</td>
+              <td className="p-4 text-sm text-muted-foreground">
                 {app.schedule.scheduledate.toLocaleDateString()} @ {app.schedule.scheduletime.toString()}
               </td>
               <td className="p-4 text-right">
@@ -47,7 +39,7 @@ async function PatientAppointmentsList({ userId }: { userId: string }) {
                   "use server"
                   await cancelAppointment(app.id)
                 }}>
-                  <button className="text-red-400 hover:text-red-300 text-sm font-medium border border-red-500/20 rounded px-3 py-1 hover:bg-red-500/100/10 transition-colors cursor-pointer">
+                  <button className="text-red-600 hover:text-red-700 hover:bg-red-50 text-sm font-medium border border-red-200 rounded-lg px-3 py-1 transition-colors cursor-pointer">
                     Cancel
                   </button>
                 </form>
@@ -56,7 +48,7 @@ async function PatientAppointmentsList({ userId }: { userId: string }) {
           ))}
           {appointments.length === 0 && (
             <tr>
-              <td colSpan={5} className="p-8 text-center text-zinc-400">
+              <td colSpan={5} className="p-8 text-center text-muted-foreground">
                 You have no appointments booked.
               </td>
             </tr>
@@ -73,13 +65,8 @@ export default async function PatientAppointments() {
 
   return (
     <div>
-      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight animate-fade-in-up">My Bookings</h1>
-
-      <Suspense fallback={
-        <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl h-64 flex items-center justify-center animate-pulse">
-           <div className="text-zinc-500">Loading bookings...</div>
-        </div>
-      }>
+      <h1 className="text-3xl font-bold text-foreground mb-8">My Bookings</h1>
+      <Suspense fallback={<SkeletonTable rows={4} cols={5} />}>
         <PatientAppointmentsList userId={session.user.id} />
       </Suspense>
     </div>
