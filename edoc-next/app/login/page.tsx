@@ -1,7 +1,12 @@
-import { signIn } from "@/auth"
+"use client"
+
 import { SubmitButton } from "./SubmitButton"
+import { loginAction } from "./actions"
+import { useState } from "react"
 
 export default function LoginPage() {
+  const [error, setError] = useState<string | null>(null)
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-teal-50 via-white to-slate-50">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg border border-border animate-fade-in-up">
@@ -15,12 +20,17 @@ export default function LoginPage() {
           <p className="mt-1 text-sm text-muted-foreground">Sign in to your account</p>
         </div>
 
+        {error && (
+          <div className="p-3 text-sm text-red-700 bg-red-50 rounded-xl border border-red-200">
+            {error}
+          </div>
+        )}
+
         <form action={async (formData) => {
-          "use server"
-          try {
-            await signIn("credentials", formData)
-          } catch (error: any) {
-            if (error.name === "RedirectError") throw error;
+          setError(null)
+          const result = await loginAction(formData)
+          if (result?.error) {
+            setError(result.error)
           }
         }} className="space-y-4">
           <div>
