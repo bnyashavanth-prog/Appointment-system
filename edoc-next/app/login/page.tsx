@@ -1,4 +1,5 @@
 import { signIn } from "@/auth"
+import { SubmitButton } from "./SubmitButton"
 
 export default function LoginPage() {
   return (
@@ -37,12 +38,7 @@ export default function LoginPage() {
               placeholder="••••••••" 
             />
           </div>
-          <button 
-            type="submit" 
-            className="w-full px-4 py-2 text-black bg-white rounded-xl hover:bg-zinc-200 transition-all duration-300 shadow-lg hover:-translate-y-0.5 active:scale-[0.97] font-medium"
-          >
-            Login
-          </button>
+          <SubmitButton>Login</SubmitButton>
         </form>
 
         <div className="text-center text-sm">
