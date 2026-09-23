@@ -1,4 +1,4 @@
-﻿import { auth } from "@/auth"
+import { auth } from "@/auth"
 import { prisma } from "@/lib/db"
 
 export default async function DoctorDashboard() {
@@ -10,15 +10,14 @@ export default async function DoctorDashboard() {
       include: { specialty: true }
     })
 
-    const sessionCount = await prisma.schedule.count({
-      where: { doctorId: doctor?.id }
-    })
-
-    const appointmentCount = await prisma.appointment.count({
-      where: { 
-        schedule: { doctorId: doctor?.id }
-      }
-    })
+    const [sessionCount, appointmentCount] = await Promise.all([
+      prisma.schedule.count({
+        where: { doctorId: doctor?.id }
+      }),
+      prisma.appointment.count({
+        where: { schedule: { doctorId: doctor?.id } }
+      })
+    ])
 
     return (
       <div>

@@ -1,10 +1,12 @@
 import { prisma } from "@/lib/db"
 
 export default async function AdminDashboard() {
-  const doctorCount = await prisma.doctor.count()
-  const patientCount = await prisma.patient.count()
-  const appointmentCount = await prisma.appointment.count()
-  const sessionCount = await prisma.schedule.count()
+  const [doctorCount, patientCount, appointmentCount, sessionCount] = await Promise.all([
+    prisma.doctor.count(),
+    prisma.patient.count(),
+    prisma.appointment.count(),
+    prisma.schedule.count()
+  ])
 
   return (
     <div>
