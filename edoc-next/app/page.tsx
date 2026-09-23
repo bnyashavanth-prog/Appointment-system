@@ -35,7 +35,7 @@ export default function Home() {
 
   return (
     <LazyMotion features={domAnimation}>
-      <div className={`flex min-h-screen ${styles.gradientBg} relative overflow-hidden`} onMouseMove={handleMouseMove}>
+      <div className={`flex flex-col md:flex-row min-h-[100dvh] md:min-h-screen ${styles.gradientBg} relative overflow-x-hidden`} onMouseMove={handleMouseMove}>
         
         {/* RIGHT PANEL DECORATIVE SHAPES */}
         <m.div style={{ x: shiftX, y: shiftY }} className="absolute inset-0 pointer-events-none z-0 right-panel-bg hidden md:block">
@@ -45,31 +45,36 @@ export default function Home() {
           <div className="absolute bottom-[15%] right-[25%] text-[#0F766E]/5"><Plus size={24} /></div>
         </m.div>
 
-        {/* HEADER BRANDING */}
-        <div className="absolute top-8 left-8 md:top-10 md:left-10 z-[100]">
-          <m.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }} className="flex flex-col">
-            <div className="flex items-center gap-2">
-              <m.div initial={shouldReduceMotion ? {} : { filter: "drop-shadow(0 0 0 rgba(15,118,110,0))" }} animate={shouldReduceMotion ? {} : { filter: ["drop-shadow(0 0 0 rgba(15,118,110,0))", "drop-shadow(0 0 12px rgba(15,118,110,0.8))", "drop-shadow(0 0 0 rgba(15,118,110,0))"] }} transition={{ duration: 1, delay: 0.5 }} className="text-[#0F766E]">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16 4C16 2.89543 15.1046 2 14 2H10C8.89543 2 8 2.89543 8 4V8H4C2.89543 8 2 8.89543 2 10V14C2 15.1046 2.89543 16 4 16H8V20C8 21.1046 8.89543 22 10 22H14C15.1046 22 16 21.1046 16 20V16H20C21.1046 16 22 15.1046 22 14V10C22 8.89543 21.1046 8 20 8H16V4Z" />
-                </svg>
-              </m.div>
-              <span className="text-[22px] font-bold text-[#1F2937] tracking-tight drop-shadow-sm leading-none">HealthCare<span className="text-[#0F766E]">+</span></span>
-            </div>
-            <span className="text-[11px] font-medium text-[#4B5563] mt-1.5 ml-[36px] tracking-wide">Better Care. Healthier Tomorrow.</span>
-          </m.div>
-        </div>
-
         {/* LEFT PANEL */}
         <AuthBackground />
+        
+        {/* Mobile floating icons (visible < md only) */}
         <MobileFloatingIcons />
 
-        {/* RIGHT PANEL — landing card */}
-        <div className="relative w-full md:w-[40%] min-h-screen flex items-center justify-center p-6 z-10">
-          <m.div
-            variants={containerVariants} initial="hidden" animate="show"
-            className="w-full max-w-[420px] bg-white/95 backdrop-blur-[10px] rounded-[24px] p-10 shadow-[0_4px_6px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.06)] border border-white/60 text-center"
-          >
+        {/* RIGHT PANEL / MOBILE CONTAINER */}
+        <div className="flex-1 flex flex-col min-h-[100dvh] md:min-h-screen w-full relative z-10 overflow-y-auto overflow-x-hidden">
+          
+          {/* HEADER BRANDING */}
+          <div className="w-full pt-8 px-6 pb-2 md:p-0 md:fixed md:top-10 md:left-10 z-[100] flex justify-start">
+            <m.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }} className="flex flex-col">
+              <div className="flex items-center gap-2">
+                <m.div initial={shouldReduceMotion ? {} : { filter: "drop-shadow(0 0 0 rgba(15,118,110,0))" }} animate={shouldReduceMotion ? {} : { filter: ["drop-shadow(0 0 0 rgba(15,118,110,0))", "drop-shadow(0 0 12px rgba(15,118,110,0.8))", "drop-shadow(0 0 0 rgba(15,118,110,0))"] }} transition={{ duration: 1, delay: 0.5 }} className="text-[#0F766E]">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 4C16 2.89543 15.1046 2 14 2H10C8.89543 2 8 2.89543 8 4V8H4C2.89543 8 2 8.89543 2 10V14C2 15.1046 2.89543 16 4 16H8V20C8 21.1046 8.89543 22 10 22H14C15.1046 22 16 21.1046 16 20V16H20C21.1046 16 22 15.1046 22 14V10C22 8.89543 21.1046 8 20 8H16V4Z" />
+                  </svg>
+                </m.div>
+                <span className="text-[22px] font-bold text-[#1F2937] tracking-tight drop-shadow-sm leading-none">HealthCare<span className="text-[#0F766E]">+</span></span>
+              </div>
+              <span className="text-[11px] font-medium text-[#4B5563] mt-1.5 ml-[36px] tracking-wide">Better Care. Healthier Tomorrow.</span>
+            </m.div>
+          </div>
+
+          {/* CARD CONTAINER */}
+          <div className="flex-1 flex items-center justify-center p-4 py-8 md:p-6 w-full">
+            <m.div
+              variants={containerVariants} initial="hidden" animate="show"
+              className="w-full max-w-[420px] bg-white/95 backdrop-blur-[10px] rounded-[24px] p-8 md:p-10 shadow-[0_4px_6px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.06)] border border-white/60 text-center"
+            >
             <m.div variants={itemVariants} className="flex justify-center mb-6">
               <div className="relative w-20 h-20">
                 <span className="absolute -inset-2 rounded-full border-2 border-[#0F766E]/15 animate-[pulseRing_2.5s_ease-in-out_infinite]" />
