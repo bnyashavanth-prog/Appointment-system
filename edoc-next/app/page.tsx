@@ -1,31 +1,104 @@
+"use client"
+
 import Link from 'next/link'
+import { m, LazyMotion, domAnimation, useMotionValue, useTransform, useReducedMotion } from "framer-motion"
+import { AuthBackground, MobileFloatingIcons } from "@/components/auth/AuthBackground"
+import { Plus, ArrowRight } from "lucide-react"
+import styles from "@/app/login/login.module.css"
 
 export default function Home() {
+  const shouldReduceMotion = useReducedMotion()
+
+  // Mouse Parallax values
+  const mouseX = useMotionValue(0)
+  const mouseY = useMotionValue(0)
+  const shiftX = useTransform(mouseX, [-0.5, 0.5], [-8, 8])
+  const shiftY = useTransform(mouseY, [-0.5, 0.5], [-8, 8])
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (shouldReduceMotion) return
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width - 0.5
+    const y = (e.clientY - rect.top) / rect.height - 0.5
+    mouseX.set(x)
+    mouseY.set(y)
+  }
+
+  const containerVariants: any = {
+    hidden: { opacity: 0, y: 24 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut", delay: 0.6, staggerChildren: 0.1 } }
+  }
+  const itemVariants: any = {
+    hidden: { opacity: 0, y: 10 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" } }
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-white to-slate-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 relative overflow-hidden">
-      {/* Subtle decorative circles */}
-      <div className="absolute top-20 right-20 w-72 h-72 bg-teal-100 rounded-full blur-3xl opacity-40 pointer-events-none"></div>
-      <div className="absolute bottom-20 left-20 w-96 h-96 bg-teal-50 rounded-full blur-3xl opacity-50 pointer-events-none"></div>
-      
-      <div className="sm:mx-auto sm:w-full sm:max-w-md text-center relative z-10 bg-white border border-border shadow-lg rounded-2xl p-10 animate-fade-in-up">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-50 rounded-2xl mb-6">
-          <svg className="w-8 h-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-          </svg>
-        </div>
-        <h1 className="text-4xl font-bold text-foreground tracking-tight">eDoc</h1>
-        <p className="mt-3 text-lg text-muted-foreground">Doctor Appointment System</p>
-        <p className="mt-2 text-sm text-slate-400">Book appointments with qualified doctors online.</p>
+    <LazyMotion features={domAnimation}>
+      <div className={`flex min-h-screen ${styles.gradientBg} relative overflow-hidden`} onMouseMove={handleMouseMove}>
         
-        <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
-          <Link href="/login" className="inline-flex justify-center items-center rounded-xl bg-primary py-3 px-8 text-sm font-medium text-white hover:bg-teal-700 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:scale-[0.98]">
-            Login
-          </Link>
-          <Link href="/signup" className="inline-flex justify-center items-center rounded-xl bg-white hover:bg-slate-50 py-3 px-8 text-sm font-medium text-slate-700 border border-border transition-all duration-200 hover:-translate-y-0.5 active:scale-[0.98]">
-            Sign Up
-          </Link>
+        {/* RIGHT PANEL DECORATIVE SHAPES */}
+        <m.div style={{ x: shiftX, y: shiftY }} className="absolute inset-0 pointer-events-none z-0 right-panel-bg hidden md:block">
+          <m.div animate={shouldReduceMotion ? {} : { rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }} className="absolute -top-[10%] -right-[5%] w-[400px] h-[400px] bg-teal-500/[0.04] rounded-full blur-[80px]" />
+          <m.div animate={shouldReduceMotion ? {} : { rotate: -360 }} transition={{ duration: 30, repeat: Infinity, ease: "linear" }} className="absolute bottom-[10%] right-[15%] w-[300px] h-[300px] bg-[#E8FBF3] rounded-full blur-[60px]" />
+          <div className="absolute top-[20%] right-[8%] text-[#0F766E]/5"><Plus size={32} /></div>
+          <div className="absolute bottom-[15%] right-[25%] text-[#0F766E]/5"><Plus size={24} /></div>
+        </m.div>
+
+        {/* HEADER BRANDING */}
+        <div className="absolute top-8 left-8 md:top-10 md:left-10 z-[100]">
+          <m.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }} className="flex flex-col">
+            <div className="flex items-center gap-2">
+              <m.div initial={shouldReduceMotion ? {} : { filter: "drop-shadow(0 0 0 rgba(15,118,110,0))" }} animate={shouldReduceMotion ? {} : { filter: ["drop-shadow(0 0 0 rgba(15,118,110,0))", "drop-shadow(0 0 12px rgba(15,118,110,0.8))", "drop-shadow(0 0 0 rgba(15,118,110,0))"] }} transition={{ duration: 1, delay: 0.5 }} className="text-[#0F766E]">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 4C16 2.89543 15.1046 2 14 2H10C8.89543 2 8 2.89543 8 4V8H4C2.89543 8 2 8.89543 2 10V14C2 15.1046 2.89543 16 4 16H8V20C8 21.1046 8.89543 22 10 22H14C15.1046 22 16 21.1046 16 20V16H20C21.1046 16 22 15.1046 22 14V10C22 8.89543 21.1046 8 20 8H16V4Z" />
+                </svg>
+              </m.div>
+              <span className="text-[22px] font-bold text-[#1F2937] tracking-tight drop-shadow-sm leading-none">HealthCare<span className="text-[#0F766E]">+</span></span>
+            </div>
+            <span className="text-[11px] font-medium text-[#4B5563] mt-1.5 ml-[36px] tracking-wide">Better Care. Healthier Tomorrow.</span>
+          </m.div>
+        </div>
+
+        {/* LEFT PANEL */}
+        <AuthBackground />
+        <MobileFloatingIcons />
+
+        {/* RIGHT PANEL — landing card */}
+        <div className="relative w-full md:w-[40%] min-h-screen flex items-center justify-center p-6 z-10">
+          <m.div
+            variants={containerVariants} initial="hidden" animate="show"
+            className="w-full max-w-[420px] bg-white/95 backdrop-blur-[10px] rounded-[24px] p-10 shadow-[0_4px_6px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.06)] border border-white/60 text-center"
+          >
+            <m.div variants={itemVariants} className="flex justify-center mb-6">
+              <div className="relative w-20 h-20">
+                <span className="absolute -inset-2 rounded-full border-2 border-[#0F766E]/15 animate-[pulseRing_2.5s_ease-in-out_infinite]" />
+                <div className="w-full h-full rounded-full bg-[#E8FBF3] flex items-center justify-center relative z-10 text-[#0F766E]">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M16 4C16 2.89543 15.1046 2 14 2H10C8.89543 2 8 2.89543 8 4V8H4C2.89543 8 2 8.89543 2 10V14C2 15.1046 2.89543 16 4 16H8V20C8 21.1046 8.89543 22 10 22H14C15.1046 22 16 21.1046 16 20V16H20C21.1046 16 22 15.1046 22 14V10C22 8.89543 21.1046 8 20 8H16V4Z" />
+                  </svg>
+                </div>
+              </div>
+            </m.div>
+
+            <m.h1 variants={itemVariants} className="text-[32px] font-bold text-[#1F2937] mb-2">eDoc Portal</m.h1>
+            <m.p variants={itemVariants} className="text-[#6B7280] mb-10 leading-relaxed text-[15px]">
+              The modern appointment system for doctors and patients. Book your next visit instantly.
+            </m.p>
+
+            <m.div variants={itemVariants} className="flex flex-col gap-3">
+              <Link href="/login" className="w-full py-4 bg-[#0F766E] text-white rounded-xl font-bold text-[15px] transition-all duration-200 shadow-sm hover:bg-[#0d645e] hover:-translate-y-px hover:shadow-md active:scale-[0.98] flex items-center justify-center gap-2 group">
+                Sign In to Account
+                <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+              </Link>
+              
+              <Link href="/signup" className="w-full py-4 bg-[#EEF2F9] text-[#1F2937] rounded-xl font-bold text-[15px] transition-all duration-200 hover:bg-[#E2E8F4] hover:-translate-y-px active:scale-[0.98]">
+                Register as Patient
+              </Link>
+            </m.div>
+          </m.div>
         </div>
       </div>
-    </div>
+    </LazyMotion>
   )
 }

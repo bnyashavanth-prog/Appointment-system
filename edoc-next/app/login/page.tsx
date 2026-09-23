@@ -6,7 +6,7 @@ import { loginAction } from "./actions"
 import { m, LazyMotion, domAnimation, useMotionValue, useTransform, useReducedMotion } from "framer-motion"
 import { User, Eye, EyeOff, Plus, Mail, Lock } from "lucide-react"
 import Link from "next/link"
-import { LoginBackground, MobileFloatingIcons } from "@/components/auth/LoginBackground"
+import { AuthBackground, MobileFloatingIcons } from "@/components/auth/AuthBackground"
 import styles from "./login.module.css"
 
 export default function LoginPage() {
@@ -74,29 +74,37 @@ export default function LoginPage() {
         </m.div>
 
         {/* HEADER BRANDING */}
-        <div className="absolute top-6 left-6 md:top-8 md:left-8 z-[100]">
+        <div className="absolute top-8 left-8 md:top-10 md:left-10 z-[100]">
           <m.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
-            className="flex items-center gap-2.5"
+            className="flex flex-col"
           >
-            <m.div 
-              initial={shouldReduceMotion ? {} : { boxShadow: "0 0 0 rgba(15,118,110,0)" }}
-              animate={shouldReduceMotion ? {} : { boxShadow: ["0 0 0 rgba(15,118,110,0)", "0 0 20px rgba(15,118,110,0.6)", "0 0 0 rgba(15,118,110,0)"] }}
-              transition={{ duration: 1, delay: 0.5 }}
-              className="w-9 h-9 bg-[#0F766E] rounded-xl flex items-center justify-center text-white shadow-lg"
-            >
-              <Plus size={22} strokeWidth={2.5} />
-            </m.div>
-            <span className="text-xl font-bold text-[#1F2937] tracking-tight drop-shadow-sm">
-              HealthCare<span className="text-[#0F766E]">+</span>
+            <div className="flex items-center gap-2">
+              <m.div 
+                initial={shouldReduceMotion ? {} : { filter: "drop-shadow(0 0 0 rgba(15,118,110,0))" }}
+                animate={shouldReduceMotion ? {} : { filter: ["drop-shadow(0 0 0 rgba(15,118,110,0))", "drop-shadow(0 0 12px rgba(15,118,110,0.8))", "drop-shadow(0 0 0 rgba(15,118,110,0))"] }}
+                transition={{ duration: 1, delay: 0.5 }}
+                className="text-[#0F766E]"
+              >
+                {/* Custom medical cross SVG matching the mockup */}
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 4C16 2.89543 15.1046 2 14 2H10C8.89543 2 8 2.89543 8 4V8H4C2.89543 8 2 8.89543 2 10V14C2 15.1046 2.89543 16 4 16H8V20C8 21.1046 8.89543 22 10 22H14C15.1046 22 16 21.1046 16 20V16H20C21.1046 16 22 15.1046 22 14V10C22 8.89543 21.1046 8 20 8H16V4Z" />
+                </svg>
+              </m.div>
+              <span className="text-[22px] font-bold text-[#1F2937] tracking-tight drop-shadow-sm leading-none">
+                HealthCare<span className="text-[#0F766E]">+</span>
+              </span>
+            </div>
+            <span className="text-[11px] font-medium text-[#4B5563] mt-1.5 ml-[36px] tracking-wide">
+              Better Care. Healthier Tomorrow.
             </span>
           </m.div>
         </div>
 
         {/* LEFT PANEL — animated scene */}
-        <LoginBackground />
+        <AuthBackground />
 
         {/* Mobile floating icons (visible < md only) */}
         <MobileFloatingIcons />

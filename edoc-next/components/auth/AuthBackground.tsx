@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react"
 import { m, LazyMotion, domAnimation } from "framer-motion"
 import { Stethoscope, Pill, ClipboardList, Activity } from "lucide-react"
 
-export function LoginBackground() {
+export function AuthBackground() {
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
