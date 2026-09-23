@@ -3,13 +3,15 @@
 import { SubmitButton } from "./SubmitButton"
 import { loginAction } from "./actions"
 import { useState } from "react"
+import { LoginBackground } from "@/components/auth/LoginBackground"
 
 export default function LoginPage() {
   const [error, setError] = useState<string | null>(null)
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-teal-50 via-white to-slate-50">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-lg border border-border animate-fade-in-up">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden">
+      <LoginBackground />
+      <div className="relative z-10 w-full max-w-md p-8 space-y-6 bg-white rounded-2xl shadow-xl border border-border animate-fade-in-up">
         <div className="text-center">
           <div className="inline-flex items-center justify-center w-12 h-12 bg-teal-50 rounded-xl mb-4">
             <svg className="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
