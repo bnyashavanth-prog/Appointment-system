@@ -163,6 +163,7 @@ export default function SignupPage() {
           </m.div>
         </div>
       </div>
+      </div>
     </LazyMotion>
   )
 }

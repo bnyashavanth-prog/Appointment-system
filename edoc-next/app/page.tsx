@@ -104,6 +104,7 @@ export default function Home() {
           </m.div>
         </div>
       </div>
+      </div>
     </LazyMotion>
   )
 }
