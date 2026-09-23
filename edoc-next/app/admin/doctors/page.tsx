@@ -2,7 +2,9 @@ import { prisma } from "@/lib/db"
 import DoctorForm from "./DoctorForm"
 import { deleteDoctor } from "./actions"
 
-export default async function AdminDoctors() {
+import { Suspense } from "react"
+
+async function AdminDoctorsList() {
   const doctors = await prisma.doctor.findMany({
     include: { specialty: true, user: true }
   })
@@ -10,9 +12,7 @@ export default async function AdminDoctors() {
   const specialties = await prisma.specialty.findMany()
 
   return (
-    <div>
-      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight animate-fade-in-up">Doctors</h1>
-      
+    <>
       <DoctorForm specialties={specialties} />
 
       <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl transition-all duration-300 ease-out animate-fade-in-up border border-white/10 overflow-hidden">
@@ -38,16 +38,42 @@ export default async function AdminDoctors() {
                     "use server"
                     await deleteDoctor(doc.id)
                   }}>
-                    <button className="text-red-400 hover:text-red-300 text-sm font-medium border border-red-500/20 rounded px-3 py-1 hover:bg-red-500/100/10 transition-colors">
+                    <button className="text-red-400 hover:text-red-300 text-sm font-medium border border-red-500/20 rounded px-3 py-1 hover:bg-red-500/100/10 transition-colors cursor-pointer">
                       Delete
                     </button>
                   </form>
                 </td>
               </tr>
             ))}
+            {doctors.length === 0 && (
+              <tr>
+                <td colSpan={5} className="p-8 text-center text-zinc-400">
+                  No doctors found.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
+    </>
+  )
+}
+
+export default async function AdminDoctors() {
+  return (
+    <div>
+      <h1 className="text-4xl font-extrabold text-white mb-8 tracking-tight animate-fade-in-up">Doctors</h1>
+      
+      <Suspense fallback={
+        <div className="animate-pulse">
+          <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl h-64 mb-8"></div>
+          <div className="backdrop-blur-2xl bg-white/[0.06] border border-white/15 shadow-[0_8px_32px_0_rgba(0,0,0,0.8)] rounded-3xl h-64 flex items-center justify-center">
+             <div className="text-zinc-500">Loading doctors...</div>
+          </div>
+        </div>
+      }>
+        <AdminDoctorsList />
+      </Suspense>
     </div>
   )
 }
