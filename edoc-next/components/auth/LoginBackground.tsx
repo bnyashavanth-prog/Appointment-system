@@ -1,99 +1,106 @@
 "use client"
 
 import { m, LazyMotion, domAnimation } from "framer-motion"
-import { Stethoscope, Activity, Pill, Cross, CalendarCheck, ClipboardList } from "lucide-react"
+import { Stethoscope, Pill, ClipboardList, Activity } from "lucide-react"
 
 export function LoginBackground() {
   return (
     <LazyMotion features={domAnimation}>
-      <div className="absolute inset-0 z-0 overflow-hidden bg-gradient-to-br from-teal-50 via-white to-slate-50 pointer-events-none">
+      <div className="hidden md:flex relative w-[60%] h-full flex-shrink-0 overflow-hidden">
         
-        {/* Soft Blurred Orbs */}
-        <m.div
-          animate={{ x: [0, 30, 0], y: [0, -30, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-32 -left-32 w-96 h-96 bg-teal-100 rounded-full mix-blend-multiply filter blur-3xl opacity-20"
-        />
-        <m.div
-          animate={{ x: [0, -40, 0], y: [0, 40, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute top-1/3 -right-32 w-96 h-96 bg-primary/10 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
-        />
-        <m.div
-          animate={{ x: [0, 20, 0], y: [0, -20, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-          className="absolute -bottom-40 left-1/4 w-[500px] h-[500px] bg-teal-50 rounded-full mix-blend-multiply filter blur-3xl opacity-40"
-        />
+        {/* Animated gradient background (video fallback / base) */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#d1fae5] via-[#99f6e4] to-[#5eead4]" 
+          style={{ animation: "kenBurns 20s ease-in-out alternate infinite" }} />
+        
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 z-[1]"
+          style={{ background: "linear-gradient(135deg, rgba(232,245,240,0.55), rgba(15,118,110,0.25))" }} />
 
         {/* Floating Medical Icons */}
-        {/* Icon 1: Stethoscope */}
         <m.div
-          animate={{ y: [0, -15, 0] }}
-          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-20 left-10 md:left-24 text-primary opacity-10"
+          animate={{ y: [0, -10, 0], rotate: [0, 3, -3, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[8%] left-[6%] z-[2] text-[#0F766E]/[0.12]"
         >
-          <Stethoscope size={100} strokeWidth={1} />
+          <Stethoscope size={72} strokeWidth={1.2} />
         </m.div>
 
-        {/* Icon 2: Pill (Hidden on small screens) */}
-        <m.div
-          animate={{ y: [0, 15, 0] }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-          className="absolute top-40 right-16 md:right-32 text-primary opacity-10 hidden sm:block"
-        >
-          <Pill size={80} strokeWidth={1} className="rotate-45" />
-        </m.div>
-
-        {/* Icon 3: Calendar */}
-        <m.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-          className="absolute bottom-40 left-12 md:left-36 text-primary opacity-10"
-        >
-          <CalendarCheck size={120} strokeWidth={1} className="-rotate-12" />
-        </m.div>
-
-        {/* Icon 4: Clipboard (Hidden on small screens) */}
-        <m.div
-          animate={{ y: [0, -20, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-          className="absolute bottom-32 right-20 md:right-40 text-primary opacity-10 hidden sm:block"
-        >
-          <ClipboardList size={90} strokeWidth={1} className="rotate-12" />
-        </m.div>
-
-        {/* Icon 5: Cross */}
         <m.div
           animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 7.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-          className="absolute top-1/2 left-4 md:left-1/4 text-primary opacity-[0.07]"
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          className="absolute top-[14%] right-[12%] z-[2] text-[#0F766E]/[0.12]"
         >
-          <Cross size={140} strokeWidth={1} />
+          <Pill size={56} strokeWidth={1.2} className="rotate-45" />
         </m.div>
 
-        {/* EKG / Pulse Line across bottom */}
-        <div className="absolute bottom-0 left-0 w-full h-32 opacity-15">
-          <svg
-            className="w-full h-full"
-            preserveAspectRatio="none"
-            viewBox="0 0 1000 100"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <m.path
-              d="M0,50 L200,50 L220,20 L240,80 L260,50 L500,50 L520,10 L540,90 L560,50 L1000,50"
-              stroke="currentColor"
-              className="text-primary"
+        <m.div
+          animate={{ y: [0, -8, 0], rotate: [0, -2, 2, 0] }}
+          transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[22%] left-[10%] z-[2] text-[#0F766E]/[0.12]"
+        >
+          <ClipboardList size={64} strokeWidth={1.2} />
+        </m.div>
+
+        <m.div
+          animate={{ y: [0, 12, 0] }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+          className="absolute top-[48%] right-[8%] z-[2] text-[#0F766E]/[0.12]"
+        >
+          <Activity size={68} strokeWidth={1.2} />
+        </m.div>
+
+        {/* ECG Heartbeat Line */}
+        <div className="absolute bottom-10 left-0 w-full h-20 z-[2] opacity-30">
+          <svg viewBox="0 0 1000 80" preserveAspectRatio="none" className="w-full h-full" fill="none">
+            <path
+              d="M0,40 L150,40 L170,15 L185,65 L200,40 L350,40 L370,10 L385,70 L400,40 L550,40 L570,15 L585,65 L600,40 L750,40 L770,10 L785,70 L800,40 L1000,40"
+              stroke="#0F766E"
               strokeWidth="2"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={{ pathLength: 1, opacity: 1 }}
-              transition={{
-                pathLength: { duration: 4, ease: "linear", repeat: Infinity },
-                opacity: { duration: 0.5 }
-              }}
+              fill="none"
+              className="animate-[drawEcg_3s_linear_infinite]"
+              style={{ strokeDasharray: 1200, strokeDashoffset: 1200 }}
             />
+            <circle r="4" fill="#0F766E" style={{ filter: "drop-shadow(0 0 4px rgba(15,118,110,0.7))" }}>
+              <animateMotion dur="3s" repeatCount="indefinite"
+                path="M0,40 L150,40 L170,15 L185,65 L200,40 L350,40 L370,10 L385,70 L400,40 L550,40 L570,15 L585,65 L600,40 L750,40 L770,10 L785,70 L800,40 L1000,40" />
+            </circle>
           </svg>
         </div>
+
+        {/* Doctor Photo */}
+        <m.div
+          initial={{ x: -120, opacity: 0, scale: 0.92 }}
+          animate={{ x: 0, opacity: 1, scale: [0.92, 1, 1.02, 1], y: [15, -5, 0] }}
+          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2, times: [0, 0.7, 0.9, 1] }}
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-[3] w-[420px] h-[75%]"
+        >
+          {/* Shadow */}
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-60 h-6 bg-black/20 blur-xl rounded-full" />
+          <m.div
+            animate={{ y: [0, -8, 0] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.3 }}
+            className="w-full h-full relative"
+            style={{ maskImage: "linear-gradient(to top, transparent 0%, black 12%, black 100%)", WebkitMaskImage: "linear-gradient(to top, transparent 0%, black 12%, black 100%)" }}
+          >
+            <img src="/images/doctor.jpg" alt="" className="w-full h-full object-contain object-bottom mix-blend-multiply" />
+          </m.div>
+        </m.div>
+      </div>
+    </LazyMotion>
+  )
+}
+
+/* Mobile-only floating icons */
+export function MobileFloatingIcons() {
+  return (
+    <LazyMotion features={domAnimation}>
+      <div className="md:hidden fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <m.div animate={{ y: [0, -10, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[8%] left-[6%] text-[#0F766E]/[0.08]"><Stethoscope size={56} strokeWidth={1} /></m.div>
+        <m.div animate={{ y: [0, 10, 0] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+          className="absolute top-[18%] right-[10%] text-[#0F766E]/[0.08]"><Pill size={48} strokeWidth={1} /></m.div>
+        <m.div animate={{ y: [0, -8, 0] }} transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute bottom-[12%] left-[14%] text-[#0F766E]/[0.08]"><ClipboardList size={52} strokeWidth={1} /></m.div>
       </div>
     </LazyMotion>
   )
