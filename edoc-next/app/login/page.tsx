@@ -41,17 +41,19 @@ export default function LoginPage() {
     mouseX.set(x)
     mouseY.set(y)
   }
+  // Helper: only apply intro class if intro hasn't played yet
+  const intro = (cls: string) => hasPlayedIntro ? '' : cls
 
   return (
     <LazyMotion features={domAnimation}>
       <div 
-        className={`flex flex-col md:flex-row min-h-[100dvh] md:min-h-screen ${styles.gradientBg} relative overflow-x-hidden ${hasPlayedIntro ? styles.skipIntro : ''}`}
+        className={`flex flex-col md:flex-row min-h-[100dvh] md:min-h-screen ${styles.gradientBg} relative overflow-x-hidden`}
         onMouseMove={handleMouseMove}
       >
         {/* RIGHT PANEL DECORATIVE SHAPES (Parallax) */}
         <m.div 
           style={{ x: shiftX, y: shiftY }}
-          className={`absolute inset-0 pointer-events-none z-0 right-panel-bg hidden md:block ${styles.introBg}`}
+          className={`absolute inset-0 pointer-events-none z-0 right-panel-bg hidden md:block ${intro(styles.introBg)}`}
         >
           <m.div 
             animate={shouldReduceMotion ? {} : { rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
@@ -75,7 +77,7 @@ export default function LoginPage() {
         <div className="flex-1 flex flex-col min-h-[100dvh] md:min-h-screen w-full relative z-10 overflow-y-auto overflow-x-hidden">
           
           {/* HEADER BRANDING (in flow on mobile, fixed on desktop) */}
-          <div className={`w-full pt-8 px-6 pb-2 md:p-0 md:fixed md:top-10 md:left-10 z-[100] flex justify-start ${styles.introLogo}`}>
+          <div className={`w-full pt-8 px-6 pb-2 md:p-0 md:fixed md:top-10 md:left-10 z-[100] flex justify-start ${intro(styles.introLogo)}`}>
             <div className="flex flex-col">
               <div className="flex items-center gap-2">
                 <m.div 
@@ -101,25 +103,24 @@ export default function LoginPage() {
           {/* CARD CONTAINER */}
           <div className="flex-1 flex items-center justify-center p-4 py-8 md:p-6 w-full">
             <div
-              className={`w-full max-w-[420px] bg-white/95 backdrop-blur-[10px] rounded-[24px] shadow-[0_4px_6px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.06)] border border-white/60 relative ${styles.introCard} ${isShaking && !shouldReduceMotion ? styles.shake : ""}`}
+              className={`w-full max-w-[420px] bg-white/95 backdrop-blur-[10px] rounded-[24px] shadow-[0_4px_6px_rgba(0,0,0,0.03),0_12px_24px_rgba(0,0,0,0.06)] border border-white/60 relative ${intro(styles.introCard)} ${isShaking && !shouldReduceMotion ? styles.shake : ""}`}
               onAnimationEnd={(e) => {
                 if (e.animationName.includes('shake')) setIsShaking(false)
               }}
             >
               
-              {/* SKELETON PLACEHOLDER */}
-              <div className={`absolute inset-0 rounded-[24px] bg-white/80 backdrop-blur-md flex flex-col items-center justify-start p-10 z-50 pointer-events-none ${styles.introSkeleton}`}>
+              {!hasPlayedIntro && (
+              <div className={`absolute inset-0 rounded-[24px] bg-white/80 backdrop-blur-md flex flex-col items-center justify-start p-10 z-50 pointer-events-none ${intro(styles.introSkeleton)}`}>
                 <div className="w-16 h-16 rounded-full bg-slate-200/60 animate-pulse mb-6" />
                 <div className="w-3/4 h-8 rounded-lg bg-slate-200/60 animate-pulse mb-10" />
                 <div className="w-full h-12 rounded-xl bg-slate-200/60 animate-pulse mb-4" />
                 <div className="w-full h-12 rounded-xl bg-slate-200/60 animate-pulse mb-6" />
                 <div className="w-full h-12 rounded-xl bg-teal-600/20 animate-pulse" />
               </div>
-
-              {/* REAL CONTENT */}
+              )}              {/* REAL CONTENT */}
               <div className="p-8 md:p-10">
                 {/* Avatar badge */}
-                <div className={`flex justify-center mb-5 ${styles.introAvatar}`}>
+                <div className={`flex justify-center mb-5 ${intro(styles.introAvatar)}`}>
                   <div className="relative w-16 h-16">
                     <span className="absolute -inset-1.5 rounded-full border-2 border-[#0F766E]/15 animate-[pulseRing_2.5s_ease-in-out_infinite]" />
                     <div className="w-full h-full rounded-full bg-[#E8FBF3] flex items-center justify-center relative z-10">
@@ -128,8 +129,8 @@ export default function LoginPage() {
                   </div>
                 </div>
 
-                <h1 className={`text-center text-[26px] font-bold text-[#1F2937] mb-1 ${styles.introTitle}`}>Welcome Back</h1>
-                <p className={`text-center text-sm text-[#6B7280] mb-7 ${styles.introSub}`}>Sign in to your account</p>
+                <h1 className={`text-center text-[26px] font-bold text-[#1F2937] mb-1 ${intro(styles.introTitle)}`}>Welcome Back</h1>
+                <p className={`text-center text-sm text-[#6B7280] mb-7 ${intro(styles.introSub)}`}>Sign in to your account</p>
 
                 {error && (
                   <div className="mb-5 p-3 text-sm text-red-600 bg-red-50 rounded-xl border border-red-100 text-center font-medium animate-[fadeIn_0.25s_ease]">
@@ -149,7 +150,7 @@ export default function LoginPage() {
                   className="space-y-5"
                 >
                   {/* Email */}
-                  <div className={`group ${styles.introEmail}`}>
+                  <div className={`group ${intro(styles.introEmail)}`}>
                     <label htmlFor="email" className="block text-[13px] font-semibold text-[#374151] mb-1.5 group-focus-within:text-[#0F766E] transition-colors">
                       Email Address
                     </label>
@@ -172,7 +173,7 @@ export default function LoginPage() {
                   </div>
 
                   {/* Password */}
-                  <div className={`group ${styles.introPass}`}>
+                  <div className={`group ${intro(styles.introPass)}`}>
                     <label htmlFor="password" className="block text-[13px] font-semibold text-[#374151] mb-1.5 group-focus-within:text-[#0F766E] transition-colors">
                       Password
                     </label>
@@ -209,12 +210,12 @@ export default function LoginPage() {
                     </div>
                   </div>
 
-                  <div className={`pt-1 ${styles.introBtn}`}>
+                  <div className={`pt-1 ${intro(styles.introBtn)}`}>
                     <SubmitButton>Login</SubmitButton>
                   </div>
                 </form>
 
-                <div className={`mt-6 text-center text-sm text-[#6B7280] ${styles.introFooter}`}>
+                <div className={`mt-6 text-center text-sm text-[#6B7280] ${intro(styles.introFooter)}`}>
                   Don&apos;t have an account?{" "}
                   <Link href="/signup" className="text-[#0F766E] font-bold relative group inline-block">
                     Sign Up
