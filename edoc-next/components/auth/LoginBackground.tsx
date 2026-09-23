@@ -45,21 +45,26 @@ export function LoginBackground() {
           </video>
         </div>
 
-        {/* ========== LAYER 2: Semi-transparent gradient overlay ========== */}
+        {/* ========== LAYER 2: Semi-transparent gradient overlay + Right Vignette ========== */}
         <div
           className="absolute inset-0 z-[2]"
-          style={{ background: "linear-gradient(135deg, rgba(232,245,240,0.55), rgba(15,118,110,0.25))" }}
+          style={{ 
+            background: "linear-gradient(135deg, rgba(232,245,240,0.55), rgba(15,118,110,0.25))",
+            boxShadow: "inset -120px 0 100px -30px #EAF6F1" // Vignette blending into right panel
+          }}
         />
 
         {/* ========== LAYER 3: Floating Medical Icons ========== */}
+        {/* Pulsing Stethoscope */}
         <m.div
-          animate={{ y: [0, -10, 0], rotate: [0, 3, -3, 0] }}
+          animate={{ y: [0, -10, 0], rotate: [0, 3, -3, 0], opacity: [0.14, 0.3, 0.14] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[8%] left-[6%] z-[3] text-[#0F766E] opacity-[0.14]"
+          className="absolute top-[8%] left-[6%] z-[3] text-[#0F766E]"
         >
           <Stethoscope size={72} strokeWidth={1.2} />
         </m.div>
 
+        {/* Pill */}
         <m.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
@@ -68,6 +73,7 @@ export function LoginBackground() {
           <Pill size={56} strokeWidth={1.2} className="rotate-45" />
         </m.div>
 
+        {/* Clipboard */}
         <m.div
           animate={{ y: [0, -8, 0], rotate: [0, -2, 2, 0] }}
           transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
@@ -76,10 +82,11 @@ export function LoginBackground() {
           <ClipboardList size={64} strokeWidth={1.2} />
         </m.div>
 
+        {/* Pulsing Activity Heart */}
         <m.div
-          animate={{ y: [0, 12, 0] }}
+          animate={{ y: [0, 12, 0], opacity: [0.14, 0.3, 0.14] }}
           transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-          className="absolute top-[48%] right-[8%] z-[3] text-[#0F766E] opacity-[0.14]"
+          className="absolute top-[48%] right-[8%] z-[3] text-[#0F766E]"
         >
           <Activity size={68} strokeWidth={1.2} />
         </m.div>
@@ -97,7 +104,8 @@ export function LoginBackground() {
                 animation: "drawEcg 3s linear infinite"
               }}
             />
-            <circle r="4" fill="#0F766E" style={{ filter: "drop-shadow(0 0 4px rgba(15,118,110,0.7))" }}>
+            {/* Glowing dot with trailing glow */}
+            <circle r="4" fill="#14B8A6" style={{ filter: "drop-shadow(0 0 6px #14B8A6) drop-shadow(-10px 0 6px rgba(20,184,166,0.6))" }}>
               <animateMotion dur="3s" repeatCount="indefinite"
                 path="M0,40 L150,40 L170,15 L185,65 L200,40 L350,40 L370,10 L385,70 L400,40 L550,40 L570,15 L585,65 L600,40 L750,40 L770,10 L785,70 L800,40 L1000,40" />
             </circle>
