@@ -33,13 +33,16 @@ export function AuthBackground() {
 
         {/* ========== LAYER 1: Video background (sits on top of gradient) ========== */}
         <div className="absolute inset-0 z-[1]" style={{ animation: "kenBurns 20s ease-in-out alternate infinite" }}>
+          {/* High-quality fallback image if video is missing */}
+          <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?q=80&w=2000&auto=format&fit=crop" alt="Hospital Hallway" className="absolute inset-0 w-full h-full object-cover" />
+          
           <video
             ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover z-10"
           >
             <source src="/assets/doctors-walking.mp4" type="video/mp4" />
           </video>
@@ -49,7 +52,7 @@ export function AuthBackground() {
         <div
           className="absolute inset-0 z-[2]"
           style={{ 
-            background: "linear-gradient(135deg, rgba(232,245,240,0.55), rgba(15,118,110,0.25))",
+            background: "linear-gradient(135deg, rgba(232,245,240,0.65), rgba(15,118,110,0.35))",
             boxShadow: "inset -120px 0 100px -30px #EAF6F1" // Vignette blending into right panel
           }}
         />
@@ -111,27 +114,6 @@ export function AuthBackground() {
             </circle>
           </svg>
         </div>
-
-        {/* ========== LAYER 4: Doctor Photo ========== */}
-        <m.div
-          initial={{ x: -120, opacity: 0, scale: 0.92 }}
-          animate={{ x: 0, opacity: 1, scale: [0.92, 1, 1.02, 1], y: [15, -5, 0] }}
-          transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2, times: [0, 0.7, 0.9, 1] }}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-[4] w-[420px] h-[75%]"
-        >
-          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-60 h-6 bg-black/20 blur-xl rounded-full" />
-          <m.div
-            animate={{ y: [0, -8, 0] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1.3 }}
-            className="w-full h-full relative"
-            style={{
-              maskImage: "linear-gradient(to top, transparent 0%, black 12%, black 100%)",
-              WebkitMaskImage: "linear-gradient(to top, transparent 0%, black 12%, black 100%)"
-            }}
-          >
-            <img src="/images/doctor.jpg" alt="" className="w-full h-full object-contain object-bottom mix-blend-multiply" />
-          </m.div>
-        </m.div>
       </div>
     </LazyMotion>
   )
