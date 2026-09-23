@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect } from "react";
 
@@ -14,28 +14,19 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full bg-red-950 border border-red-500 rounded-3xl p-8 shadow-2xl">
-        <h2 className="text-3xl font-bold text-white mb-4">Critical Application Error</h2>
-        <p className="text-red-200 mb-6">The application crashed. This is the exact error message:</p>
-        
-        <div className="bg-black/50 p-4 rounded-xl overflow-auto mb-6">
-          <pre className="text-red-400 font-mono text-sm whitespace-pre-wrap">
-            {error.message || "Unknown Error"}
-          </pre>
-          {error.stack && (
-            <pre className="text-red-400/70 font-mono text-xs whitespace-pre-wrap mt-4">
-              {error.stack}
-            </pre>
-          )}
-          {error.digest && (
-            <p className="text-red-300/50 text-xs mt-4">Digest: {error.digest}</p>
-          )}
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
+      <div className="max-w-lg w-full bg-white border border-red-200 rounded-2xl p-8 shadow-lg text-center">
+        <div className="inline-flex items-center justify-center w-12 h-12 bg-red-50 rounded-xl mb-4">
+          <svg className="w-6 h-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z" />
+          </svg>
         </div>
-
+        <h2 className="text-xl font-bold text-foreground mb-2">Something went wrong</h2>
+        <p className="text-sm text-muted-foreground mb-6">{error.message || "An unexpected error occurred."}</p>
+        
         <button
           onClick={() => reset()}
-          className="bg-red-600 hover:bg-red-500 text-white px-6 py-3 rounded-xl transition-all"
+          className="bg-primary hover:bg-teal-700 text-white px-6 py-2.5 rounded-xl transition-colors font-medium cursor-pointer"
         >
           Try Again
         </button>
