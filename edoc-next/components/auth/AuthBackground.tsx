@@ -1,11 +1,12 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { m, LazyMotion, domAnimation } from "framer-motion"
 import { Stethoscope, Pill, ClipboardList, Activity } from "lucide-react"
 
 export function AuthBackground() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [isLooping, setIsLooping] = useState(false)
 
   useEffect(() => {
     const video = videoRef.current
@@ -14,11 +15,31 @@ export function AuthBackground() {
     video.addEventListener("error", () => {
       video.style.display = "none"
     })
+
+    // Precise tracking for loop point crossfade
+    let animationFrame: number
+    const checkLoop = () => {
+      if (video.duration > 0 && !video.paused) {
+        const timeLeft = video.duration - video.currentTime
+        // Dip opacity to 0 in the last 0.4s
+        if (timeLeft <= 0.4 && timeLeft > 0) {
+          setIsLooping(true)
+        } 
+        // Fade back in quickly at the start of the next loop
+        else if (video.currentTime < 0.4) {
+          setIsLooping(false)
+        }
+      }
+      animationFrame = requestAnimationFrame(checkLoop)
+    }
+    animationFrame = requestAnimationFrame(checkLoop)
+
+    return () => cancelAnimationFrame(animationFrame)
   }, [])
 
   return (
     <LazyMotion features={domAnimation}>
-      <div className="hidden md:block relative w-[60%] h-screen flex-shrink-0 overflow-hidden">
+      <div className="hidden md:block relative w-[60%] h-screen flex-shrink-0 overflow-hidden bg-black">
 
         {/* LAYER 0: Gradient fallback */}
         <div className="absolute inset-0 z-0">
@@ -35,7 +56,7 @@ export function AuthBackground() {
             animation: "kenBurns 20s ease-in-out alternate infinite, introFadeIn 1s ease-out 0.8s both"
           }}
         >
-          {/* Corridor fallback image — doctors walking in bright hospital hallway */}
+          {/* Corridor fallback image */}
           <img
             src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?q=80&w=2000&auto=format&fit=crop"
             alt="Hospital Corridor"
@@ -44,9 +65,9 @@ export function AuthBackground() {
           <video
             ref={videoRef}
             autoPlay loop muted playsInline
-            className="absolute inset-0 w-full h-full object-cover z-10"
+            className={`absolute inset-0 w-full h-full object-cover z-10 transition-opacity duration-[400ms] ease-in-out ${isLooping ? 'opacity-0' : 'opacity-100'}`}
           >
-            <source src="/assets/doctors-walking.mp4" type="video/mp4" />
+            <source src="/assets/hospital-brand-film.mp4" type="video/mp4" />
           </video>
         </div>
 
@@ -54,7 +75,7 @@ export function AuthBackground() {
         <div
           className="absolute inset-0 z-[2]"
           style={{
-            background: "linear-gradient(135deg, rgba(232,245,240,0.20), rgba(15,118,110,0.15))",
+            background: "linear-gradient(135deg, rgba(232,245,240,0.25), rgba(15,118,110,0.20))",
             boxShadow: "inset -120px 0 100px -30px rgba(234,246,241,0.7)",
             animation: "introFadeIn 1.4s ease-out 1.8s both"
           }}
