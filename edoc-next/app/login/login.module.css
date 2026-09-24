@@ -22,43 +22,48 @@
 }
 
 /* =========================================== */
-/*     PAGE-LOAD INTRO SEQUENCE (7 steps)      */
+/*     PAGE-LOAD INTRO SEQUENCE (8 steps)      */
 /* =========================================== */
 
-/* STEP 1: Background + decorative circles (0s - 0.8s) */
+/* STEP 1: Mint background + blurred decorative circles fade in (0–0.8s) */
 .introBg {
   opacity: 0;
-  animation: introFadeUp 0.8s ease-out 0s both;
+  animation: introFade 0.8s ease-out 0s both;
+}
+.introPulseCircle {
+  animation: introPulseCircle 2.5s ease-in-out infinite alternate;
 }
 
-/* STEP 3: Logo slide-in from left (1.8s) */
+/* STEP 3: Logo slide-in from left (1.8–2.2s) */
 .introLogo {
   opacity: 0;
   animation: introSlideFromLeft 0.4s ease-out 1.8s both;
 }
 
-/* STEP 5: Card entrance — blur skeleton → resolve (1.8s - 4.2s) */
+/* STEP 5 & 6: Card fades/scales in as blurred placeholder (1.8–3.2s) then resolves (3.2–4.2s) */
 .introCard {
   opacity: 0;
   animation: introCardReveal 2.4s ease-out 1.8s both;
 }
 
-/* STEP 5: Skeleton bars overlay — visible 1.8-3.2s then fade out */
-.introSkeleton {
-  opacity: 1;
-  animation: introSkeletonOut 0.6s ease-out 3.2s both;
-}
-
-/* STEP 6: Staggered content cascade (3.2s - 6.2s) */
+/* STEP 6 & 7: Staggered content cascade */
+/* Avatar, Heading, Subtext (3.2s+) staggered by 80ms */
 .introAvatar  { opacity: 0; animation: introFadeUp 0.5s ease-out 3.2s both; }
-.introTitle   { opacity: 0; animation: introFadeUp 0.5s ease-out 3.35s both; }
-.introSub     { opacity: 0; animation: introFadeUp 0.5s ease-out 3.5s both; }
+.introTitle   { opacity: 0; animation: introFadeUp 0.5s ease-out 3.28s both; }
+.introSub     { opacity: 0; animation: introFadeUp 0.5s ease-out 3.36s both; }
+
+/* Fields, Button, Footer (4.2s+) staggered by 150-200ms */
 .introEmail   { opacity: 0; animation: introFadeUp 0.6s ease-out 4.2s both; }
-.introPass    { opacity: 0; animation: introFadeUp 0.6s ease-out 4.4s both; }
-.introBtn     { opacity: 0; animation: introFadeUp 0.6s ease-out 4.6s both; }
-.introFooter  { opacity: 0; animation: introFadeUp 0.5s ease-out 4.8s both; }
+.introPass    { opacity: 0; animation: introFadeUp 0.6s ease-out 4.35s both; }
+.introBtn     { opacity: 0; animation: introFadeUp 0.6s ease-out 4.55s both; }
+.introFooter  { opacity: 0; animation: introFadeUp 0.5s ease-out 4.75s both; }
 
 /* ===== Keyframes ===== */
+
+@keyframes introFade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
 
 @keyframes introFadeUp {
   0% { opacity: 0; transform: translateY(12px); }
@@ -70,31 +75,30 @@
   100% { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes introCardReveal {
-  0%   { opacity: 0; transform: translateY(20px) scale(0.97); filter: blur(8px); }
-  25%  { opacity: 0.6; transform: translateY(0) scale(1); filter: blur(8px); }
-  58%  { opacity: 0.6; transform: translateY(0) scale(1); filter: blur(8px); }
-  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
+@keyframes introPulseCircle {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(1.05); opacity: 1; }
 }
 
-@keyframes introSkeletonOut {
-  0% { opacity: 1; }
-  100% { opacity: 0; visibility: hidden; }
+/* 
+  0-58% (1.8s to 3.2s out of 2.4s duration = 1.4/2.4 = 58%) 
+  58-100% (3.2s to 4.2s = 1.0/2.4 = 42%)
+*/
+@keyframes introCardReveal {
+  0%   { opacity: 0; transform: translateY(20px) scale(0.97); filter: blur(8px); }
+  58%  { opacity: 0.5; transform: translateY(0) scale(1); filter: blur(8px); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
 }
 
 /* ===== Reduced motion ===== */
 @media (prefers-reduced-motion: reduce) {
-  .shake, .gradientBg { animation: none; }
+  .shake, .gradientBg, .introPulseCircle { animation: none; }
 
   .introBg, .introLogo, .introCard, .introAvatar, .introTitle,
   .introSub, .introEmail, .introPass, .introBtn, .introFooter {
-    opacity: 1 !important;
+    opacity: 0;
     transform: none !important;
     filter: none !important;
-    animation: none !important;
-  }
-  .introSkeleton {
-    display: none !important;
-    animation: none !important;
+    animation: introFade 0.3s ease-out 0s forwards !important;
   }
 }
