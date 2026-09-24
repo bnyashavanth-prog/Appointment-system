@@ -11,7 +11,7 @@ const middleware = auth((req) => {
 
   const isApiAuthRoute = nextUrl.pathname.startsWith('/api/auth')
   const isPublicRoute = nextUrl.pathname === '/' || nextUrl.pathname === '/signup'
-  const isLoginRoute = nextUrl.pathname === '/login'
+  const isLoginRoute = nextUrl.pathname === '/login' || nextUrl.pathname === '/'
 
   if (isApiAuthRoute) {
     return NextResponse.next()
